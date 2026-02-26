@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --mitis-blue: #2E75B6;
+  --mitis-navy: #1F4E79;
+  --mitis-light: #DEEAF1;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: #0d1b2a;
+  color: #f0f4f8;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* PSV — Photo Sphere Viewer custom styles */
+.psv-container {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 0;
+}
+
+.psv-navbar {
+  background: rgba(15, 30, 50, 0.85) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* Custom hotspot styles */
+.psv-marker--nav {
+  filter: drop-shadow(0 0 8px rgba(46, 117, 182, 0.8));
+  transition: transform 0.2s ease;
+}
+.psv-marker--nav:hover {
+  transform: scale(1.2);
+}
+
+/* Loading screen */
+.psv-loader-container {
+  background: rgba(13, 27, 42, 0.95) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0d1b2a; }
+::-webkit-scrollbar-thumb { background: var(--mitis-blue); border-radius: 3px; }
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .glass {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .glass-dark {
+    background: rgba(13, 27, 42, 0.85);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(46,117,182,0.3);
+  }
+}
