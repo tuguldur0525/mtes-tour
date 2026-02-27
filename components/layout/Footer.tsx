@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, Phone, Mail, Eye } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
 
 export function Footer() {
   return (
@@ -9,14 +9,18 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-navy-600 flex items-center justify-center">
-                <Eye className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 rounded-lg bg-navy-100 flex items-center justify-center">
+                <img
+                  src="/images/num-logo.png"
+                  alt="logo"
+                  className="w-6 h-6 object-contain"
+                />
               </div>
               <span className="text-white font-bold">МТЭС Виртуал Аялал</span>
             </div>
             <p className="text-sm leading-relaxed">
-              Мэдээлэл Технологи Электроникийн Сургуулийн (МТЭС) 360° виртуал кампус аялал.
-              Монгол Улсын Их Сургуулийн харьяа.
+              Мэдээллийн Технологи, Электроникийн Сургуулийн (МТЭС) 360° виртуал
+              кампус аялал. Монгол Улсын Их Сургуулийн харьяа.
             </p>
           </div>
 
@@ -30,14 +34,17 @@ export function Footer() {
                 { href: "/contact", label: "Холбоо Барих" },
               ].map(({ href, label }) => (
                 <li key={href}>
-                  <Link href={href} className="hover:text-white transition-colors">
+                  <Link
+                    href={href}
+                    className="hover:text-white transition-colors"
+                  >
                     {label}
                   </Link>
                 </li>
               ))}
               <li>
                 <a
-                  href="https://mitis.edu.mn"
+                  href="https://site.num.edu.mn/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
@@ -54,15 +61,18 @@ export function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-navy-400 mt-0.5 shrink-0" />
-                <span>Монгол Улс, Улаанбаатар, СХД, Их сургуулийн гудамж-1</span>
+                <span>
+                  Улаанбаатар хот, Сүхбаатар дүүрэг, Оюутны гудамж 14/3,
+                  МУИС-ийн 7, 8-р байр
+                </span>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-navy-400 shrink-0" />
-                <span>+976 7730-3000</span>
+                <span>+976 7575-4400</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-navy-400 shrink-0" />
-                <span>info@mitis.edu.mn</span>
+                <span>info@mtes.edu.mn</span>
               </li>
             </ul>
           </div>

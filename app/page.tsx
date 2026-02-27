@@ -1,12 +1,28 @@
 import Link from "next/link";
-import { ArrowRight, Building2, MapPin, Users, Layers, Eye, Compass } from "lucide-react";
+import {
+  ArrowRight,
+  Building2,
+  MapPin,
+  Users,
+  Layers,
+  Eye,
+  Compass,
+} from "lucide-react";
 import { TOUR_CONFIG } from "@/lib/tour.config";
 
 export default function HomePage() {
   const totalScenes = TOUR_CONFIG.buildings.reduce(
     (sum, b) => sum + b.floors.reduce((fs, f) => fs + f.scenes.length, 0),
-    0
+    0,
   );
+
+  // exclude the special "campus" building from public counts
+  const buildingCount = TOUR_CONFIG.buildings.filter(
+    (b) => b.id !== "campus",
+  ).length;
+  const floorCount = TOUR_CONFIG.buildings
+    .filter((b) => b.id !== "campus")
+    .reduce((sum, b) => sum + b.floors.length, 0);
 
   return (
     <div className="min-h-screen">
@@ -33,7 +49,7 @@ export default function HomePage() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 text-sm text-navy-200">
             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            МУИС — Мэдээлэл Технологи Электроникийн Сургууль
+            МУИС — Мэдээллийн Технологи, Электроникийн Сургууль
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6 animate-fade-in">
@@ -45,13 +61,13 @@ export default function HomePage() {
           </h1>
 
           <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed animate-slide-up">
-            Гэрийн тавилцанаас МТЭС-ийн барилга, лаб, танхимуудыг бүрэн
-            эргэн тойрноо харж, дотоод орчинтой танилц.
+            Гэрийн тавилцанаас МТЭС-ийн барилга, лаб, танхимуудыг бүрэн эргэн
+            тойрноо харж, дотоод орчинтой танилц.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up [animation-delay:200ms]">
             <Link
-              href="/tour"
+              href="/tour?building=campus"
               className="group inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-navy-600 hover:bg-navy-500 text-white font-semibold text-lg transition-all duration-300 shadow-xl shadow-navy-900/50 hover:shadow-navy-600/40 hover:scale-105"
             >
               <Eye className="w-5 h-5" />
@@ -69,8 +85,12 @@ export default function HomePage() {
           {/* Stats row */}
           <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto animate-slide-up [animation-delay:400ms]">
             {[
-              { icon: Building2, value: "2", label: "Барилга" },
-              { icon: Layers, value: "8", label: "Давхар" },
+              {
+                icon: Building2,
+                value: String(buildingCount),
+                label: "Барилга",
+              },
+              { icon: Layers, value: String(floorCount), label: "Давхар" },
               { icon: MapPin, value: `${totalScenes}+`, label: "Байрлал" },
               { icon: Compass, value: "360°", label: "Панорама" },
             ].map(({ icon: Icon, value, label }) => (
@@ -98,56 +118,71 @@ export default function HomePage() {
               Барилгуудаас Сонгох
             </h2>
             <p className="text-gray-400 max-w-xl mx-auto">
-              МТЭС-ийн 2 барилга тус бүр 4 давхартай. Аялахыг хүссэн барилгаа сонгоорой.
+              МТЭС-ийн {buildingCount} барилга тус бүр хэд хэдэн давхартай.
+              Аялахыг хүссэн барилгаа сонгоорой.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {TOUR_CONFIG.buildings.map((building) => {
-              const sceneCount = building.floors.reduce(
-                (s, f) => s + f.scenes.length,
-                0
-              );
-              return (
-                <Link
-                  key={building.id}
-                  href={`/tour?building=${building.id}&floor=1`}
-                  className="group relative overflow-hidden rounded-2xl glass border border-navy-600/30 hover:border-navy-500/60 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-navy-900/50"
-                >
-                  {/* Placeholder image area */}
-                  <div className="h-48 bg-gradient-to-br from-navy-800 to-navy-900 flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-navy-600/20 to-transparent" />
-                    <Building2 className="w-20 h-20 text-navy-500 group-hover:text-navy-400 transition-colors" />
-                    <div className="absolute top-3 right-3 px-2 py-1 rounded-md bg-navy-600/60 text-xs text-white font-mono">
-                      {sceneCount} scene
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {TOUR_CONFIG.buildings
+              .filter((b) => b.id !== "campus")
+              .map((building) => {
+                const sceneCount = building.floors.reduce(
+                  (s, f) => s + f.scenes.length,
+                  0,
+                );
+                return (
+                  <Link
+                    key={building.id}
+                    href={`/tour?building=${building.id}&floor=1`}
+                    className="group relative overflow-hidden rounded-2xl glass border border-navy-600/30 hover:border-navy-500/60 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-navy-900/50"
+                  >
+                    {/* Thumbnail / image preview */}
+                    <div className="h-64 relative overflow-hidden rounded-t-2xl">
+                      {/* show building thumbnail if available, otherwise fall back to icon */}
+                      {building.thumbnailUrl ? (
+                        <img
+                          src={building.thumbnailUrl}
+                          alt={building.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 bg-gradient-to-br from-navy-800 to-navy-900 flex items-center justify-center">
+                          <Building2 className="w-20 h-20 text-navy-500 group-hover:text-navy-400 transition-colors" />
+                        </div>
+                      )}
+                      {/* overlay gradient for legibility */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-navy-800/30 to-navy-900/30" />
+                      <div className="absolute top-3 right-3 px-2 py-1 rounded-md bg-navy-600/60 text-xs text-white font-mono">
+                        {sceneCount} scene
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-white mb-1 group-hover:text-navy-200 transition-colors">
-                      {building.name}
-                    </h3>
-                    <p className="text-gray-400 text-sm mb-4 leading-relaxed">
-                      {building.description}
-                    </p>
-                    <div className="flex items-center gap-4 text-xs text-gray-500">
-                      <span className="flex items-center gap-1">
-                        <Layers className="w-3.5 h-3.5" />
-                        {building.floors.length} давхар
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5" />
-                        {sceneCount} байрлал
-                      </span>
+                    <div className="p-6">
+                      <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-navy-200 transition-colors">
+                        {building.name}
+                      </h3>
+                      <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+                        {building.description}
+                      </p>
+                      <div className="flex items-center gap-4 text-xs text-gray-500">
+                        <span className="flex items-center gap-1">
+                          <Layers className="w-3.5 h-3.5" />
+                          {building.floors.length} давхар
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <MapPin className="w-3.5 h-3.5" />
+                          {sceneCount} байрлал
+                        </span>
+                      </div>
+                      <div className="mt-4 flex items-center text-navy-400 text-sm font-medium group-hover:text-navy-300 transition-colors">
+                        Аялал эхлүүлэх
+                        <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                      </div>
                     </div>
-                    <div className="mt-4 flex items-center text-navy-400 text-sm font-medium group-hover:text-navy-300 transition-colors">
-                      Аялал эхлүүлэх
-                      <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
+                  </Link>
+                );
+              })}
           </div>
         </div>
       </section>
@@ -188,10 +223,13 @@ export default function HomePage() {
               {
                 icon: "🥽",
                 title: "VR Горим",
-                desc: "Google Cardboard-той VR headset-ээр дүрэлзсэн туршлага.",
+                desc: "Google Cardboard-той VR headset-ээ ашиглах боломжтой.",
               },
             ].map(({ icon, title, desc }) => (
-              <div key={title} className="glass rounded-xl p-6 hover:border-navy-500/50 transition-colors">
+              <div
+                key={title}
+                className="glass rounded-xl p-6 hover:border-navy-500/50 transition-colors"
+              >
                 <div className="text-3xl mb-3">{icon}</div>
                 <h3 className="text-white font-semibold mb-2">{title}</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">{desc}</p>

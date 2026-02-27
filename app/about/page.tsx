@@ -1,29 +1,47 @@
 import type { Metadata } from "next";
-import { GraduationCap, Cpu, Users, Award, BookOpen, Layers } from "lucide-react";
+import {
+  GraduationCap,
+  Cpu,
+  Users,
+  Award,
+  BookOpen,
+  Layers,
+} from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Сургуулийн Тухай",
-  description: "МТЭС-ийн тухай мэдээлэл — тэнхимүүд, сургалтын хөтөлбөр, танилцуулга",
+  description:
+    "МТЭС-ийн тухай мэдээлэл — тэнхимүүд, сургалтын хөтөлбөр, танилцуулга",
 };
 
 const DEPARTMENTS = [
   {
     icon: Cpu,
-    name: "Мэдээлэл Технологийн Тэнхим",
-    code: "МТ",
-    programs: ["Программ хангамж", "Мэдээллийн систем", "Сүлжээний технологи"],
+    name: "Мэдээлэл, компьютерын ухааны тэнхим",
+    code: "МКУТ",
+    programs: [
+      "Компьютерын ухаан",
+      "Мултимедиа технологи",
+      "Программ хангамж",
+      "Мэдээллийн систем",
+      "Мэдээллийн технологи",
+    ],
   },
   {
     icon: GraduationCap,
-    name: "Мультимедиа Технологийн Тэнхим",
-    code: "ММТ",
-    programs: ["Мультимедиа технологи", "Дизайн технологи", "Кино урлаг ба анимаци"],
+    name: "Электроник, холбооны инженерчлэлийн тэнхим",
+    code: "ЭХИТ",
+    programs: [
+      "Компьютерын сүлжээ",
+      "Холбооны технологи",
+      "Электроникийн инженерчлэл",
+    ],
   },
   {
     icon: Layers,
-    name: "Электроникийн Тэнхим",
-    code: "ЭТ",
-    programs: ["Электроник", "Телекоммуникаци", "Embedded систем"],
+    name: "Хрэглээний математикийн тэнхим",
+    code: "ХМТ",
+    programs: ["Статистик", "Хэрэглээний математик"],
   },
 ];
 
@@ -37,9 +55,9 @@ export default function AboutPage() {
             Сургуулийн Тухай
           </h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Мэдээлэл Технологи Электроникийн Сургууль (МТЭС) нь Монгол Улсын
-            Их Сургуулийн (МУИС) харьяа, мэдээллийн технологийн чиглэлийн
-            тэргүүлэх их дээд сургуулийн нэг юм.
+            Мэдээлэл Технологи Электроникийн Сургууль (МТЭС) нь Монгол Улсын Их
+            Сургуулийн (МУИС) харьяа, мэдээллийн технологийн чиглэлийн тэргүүлэх
+            их дээд сургуулийн нэг юм.
           </p>
         </div>
       </div>
@@ -48,10 +66,10 @@ export default function AboutPage() {
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
-            { icon: Users,     value: "3,000+",  label: "Оюутан" },
-            { icon: BookOpen,  value: "9",        label: "Хөтөлбөр" },
-            { icon: Award,     value: "30+",      label: "Профессор" },
-            { icon: GraduationCap, value: "1982", label: "Байгуулагдсан он" },
+            { icon: Users, value: "3,000+", label: "Оюутан" },
+            { icon: BookOpen, value: "10", label: "Хөтөлбөр" },
+            { icon: Award, value: "80+", label: "Профессор" },
+            { icon: GraduationCap, value: "2013", label: "Байгуулагдсан он" },
           ].map(({ icon: Icon, value, label }) => (
             <div key={label} className="glass rounded-xl p-5 text-center">
               <Icon className="w-6 h-6 text-navy-400 mx-auto mb-2" />
@@ -80,7 +98,10 @@ export default function AboutPage() {
                     </div>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {programs.map((p) => (
-                        <span key={p} className="text-xs px-3 py-1 rounded-full bg-navy-800/60 text-gray-400 border border-navy-700/40">
+                        <span
+                          key={p}
+                          className="text-xs px-3 py-1 rounded-full bg-navy-800/60 text-gray-400 border border-navy-700/40"
+                        >
                           {p}
                         </span>
                       ))}

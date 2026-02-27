@@ -20,13 +20,25 @@ export default function ContactPage() {
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-4">
             {[
-              { icon: MapPin, label: "Хаяг", value: "Монгол Улс, Улаанбаатар хот, Сүхбаатар дүүрэг, Их Сургуулийн гудамж-1, 14201" },
-              { icon: Phone, label: "Утас", value: "+976 7730-3000" },
-              { icon: Mail, label: "Цахим шуудан", value: "info@mitis.edu.mn" },
-              { icon: Globe, label: "Вэбсайт", value: "www.mitis.edu.mn" },
-              { icon: Clock, label: "Цагийн хуваарь", value: "Даваа-Баасан: 08:00-17:00" },
+              {
+                icon: MapPin,
+                label: "Хаяг",
+                value:
+                  "Улаанбаатар хот, Сүхбаатар дүүрэг, Оюутны гудамж 14/3, МУИС-ийн 7, 8-р байр",
+              },
+              { icon: Phone, label: "Утас", value: "+976 7575-4400" },
+              { icon: Mail, label: "Цахим шуудан", value: "info@mtes.edu.mn" },
+              { icon: Globe, label: "Вэбсайт", value: "www.site.num.edu.mn" },
+              {
+                icon: Clock,
+                label: "Цагийн хуваарь",
+                value: "Даваа-Баасан: 08:00-17:00",
+              },
             ].map(({ icon: Icon, label, value }) => (
-              <div key={label} className="glass rounded-xl p-4 flex items-start gap-3">
+              <div
+                key={label}
+                className="glass rounded-xl p-4 flex items-start gap-3"
+              >
                 <div className="w-9 h-9 rounded-lg bg-navy-700 flex items-center justify-center shrink-0">
                   <Icon className="w-4 h-4 text-navy-300" />
                 </div>
@@ -39,13 +51,20 @@ export default function ContactPage() {
           </div>
 
           {/* Map placeholder */}
-          <div className="glass rounded-xl overflow-hidden min-h-72 flex items-center justify-center">
-            <div className="text-center text-gray-500">
-              <MapPin className="w-10 h-10 mx-auto mb-2 text-navy-600" />
-              <p className="text-sm">Google Maps</p>
-              <p className="text-xs mt-1 text-gray-600">
-                47.9221° N, 106.9170° E
-              </p>
+          <div className="glass rounded-xl overflow-hidden min-h-72 relative">
+            <iframe
+              className="w-full h-full min-h-72"
+              src="https://maps.app.goo.gl/6JutEW4sfdvNm1EJ8"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            {/* Overlay pin and info */}
+            <div className="absolute top-4 right-4 bg-white/95 rounded-lg px-3 py-2 shadow-lg flex items-center gap-2 backdrop-blur-sm">
+              <MapPin className="w-4 h-4 text-red-500" />
+              <div className="text-xs">
+                <p className="font-semibold text-gray-900">47.9202, 106.9274</p>
+              </div>
             </div>
           </div>
         </div>

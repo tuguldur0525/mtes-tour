@@ -30,7 +30,7 @@ export function SceneList({
                 "w-full text-left px-3 py-2.5 rounded-lg text-sm transition-all duration-150 flex items-center justify-between group",
                 active
                   ? "bg-navy-600/80 text-white"
-                  : "text-gray-300 hover:text-white hover:bg-white/10"
+                  : "text-gray-300 hover:text-white hover:bg-white/10",
               )}
             >
               <span className="leading-snug">{scene.label}</span>
@@ -39,7 +39,7 @@ export function SceneList({
                   "w-3.5 h-3.5 shrink-0 transition-transform",
                   active
                     ? "text-navy-300"
-                    : "text-gray-600 group-hover:text-gray-400 group-hover:translate-x-0.5"
+                    : "text-gray-600 group-hover:text-gray-400 group-hover:translate-x-0.5",
                 )}
               />
             </button>

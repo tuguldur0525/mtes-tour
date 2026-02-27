@@ -26,10 +26,18 @@ export function BuildingTabs({
               "flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-md",
               active
                 ? "bg-navy-600 text-white shadow-navy-600/40"
-                : "glass-dark text-gray-300 hover:text-white hover:bg-navy-700/60"
+                : "glass-dark text-gray-300 hover:text-white hover:bg-navy-700/60",
             )}
           >
-            <Building2 className="w-3.5 h-3.5" />
+            {building.thumbnailUrl ? (
+              <img
+                src={building.thumbnailUrl}
+                alt={building.name}
+                className="w-4 h-4 rounded-full"
+              />
+            ) : (
+              <Building2 className="w-3.5 h-3.5" />
+            )}
             {building.name}
           </button>
         );

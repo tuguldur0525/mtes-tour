@@ -7,9 +7,50 @@
 import type { TourConfig } from "@/types/tour";
 
 export const TOUR_CONFIG: TourConfig = {
-  defaultBuildingId: "A",
+  // when the tour starts with no explicit building selected we show the
+  // aerial/drone view of the entire campus first.  the app treats this as a
+  // special “campus” building so the code can reuse the existing viewer
+  // infrastructure (building tabs, floor/scene handling) without a major
+  // rewrite.
+  defaultBuildingId: "campus",
 
   buildings: [
+    // ─────────────────────────────────────────────
+    // КАМПУС (анхны дээшээс харсан drone view)
+    // ─────────────────────────────────────────────
+    {
+      id: "campus",
+      name: "Кампус",
+      description: "МТЭС-ийн орчны дээшээс харсан drone зураг.",
+      thumbnailUrl: "/images/tour/thumb-campus.jpg",
+      defaultFloorId: 1,
+      floors: [
+        {
+          id: 1,
+          label: "Кампус",
+          defaultSceneId: "campus-drone",
+          scenes: [
+            {
+              id: "campus-drone",
+              label: "Drone View",
+              imageUrl: "/images/tour/campus-drone.jpg",
+              thumbnailUrl: "/images/tour/thumb-campus-drone.jpg",
+              description: "Барилга, талбайг дээшээс харсан drone view.",
+              hotspots: [
+                {
+                  id: "campus-info-select",
+                  type: "info",
+                  position: { yaw: 0, pitch: 0 },
+                  title: "Барилгаа сонгоно уу",
+                  description: "Дээд талбарын табаас A, B эсвэл C барилгаа сонгож аялалыг эхлүүлнэ үү.",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+
     // ─────────────────────────────────────────────
     // БАРИЛГА A
     // ─────────────────────────────────────────────
@@ -18,6 +59,7 @@ export const TOUR_CONFIG: TourConfig = {
       name: "Барилга A",
       description:
         "МТЭС-ийн үндсэн барилга. Лекцийн танхим, компьютерийн лаб, тэнхимийн өрөөнүүдийг агуулна.",
+
       thumbnailUrl: "/images/tour/thumb-building-a.jpg",
       defaultFloorId: 1,
 
@@ -599,8 +641,165 @@ export const TOUR_CONFIG: TourConfig = {
         },
       ],
     },
+
+
+    // ─────────────────────────────────────────────
+    // БАРИЛГА C
+    // ─────────────────────────────────────────────
+    {
+      id: "C",
+      name: "Барилга C",
+      description:
+        "МТЭС-ийн хоёр дахь барилга. Компьютерийн лаб, номын сан болон дадлагын өрөөнүүд.",
+      thumbnailUrl: "/images/tour/thumb-building-c.jpg",
+      defaultFloorId: 1,
+
+      floors: [
+        {
+          id: 1,
+          label: "1-р давхар",
+          defaultSceneId: "c1-entrance",
+          scenes: [
+            {
+              id: "c1-entrance",
+              label: "Үүдний танхим (Барилга C)",
+              imageUrl: "/images/tour/c1-entrance.jpg",
+              thumbnailUrl: "/images/tour/thumb-c1-entrance.jpg",
+              defaultYaw: 0,
+              hotspots: [
+                { id: "c1-to-corridor", type: "nav", position: { yaw: 90, pitch: -5 }, targetSceneId: "c1-corridor", tooltip: "Коридор →" },
+                { id: "c1-entrance-info", type: "info", position: { yaw: -20, pitch: 10 }, title: "Барилга C — Үүдний танхим", description: "МТЭС-ийн C барилгын гол орц.", details: { roomCode: "C-Lobby" } },
+              ],
+            },
+            {
+              id: "c1-corridor",
+              label: "1-р давхрын коридор (C)",
+              imageUrl: "/images/tour/c1-corridor.jpg",
+              thumbnailUrl: "/images/tour/thumb-c1-corridor.jpg",
+              hotspots: [
+                { id: "c1-corr-to-entrance", type: "nav", position: { yaw: 180, pitch: -5 }, targetSceneId: "c1-entrance", tooltip: "← Үүдний танхим" },
+                { id: "c1-corr-to-library", type: "nav", position: { yaw: -60, pitch: -10 }, targetSceneId: "c1-library", tooltip: "Номын сан →" },
+              ],
+            },
+            {
+              id: "c1-library",
+              label: "Номын Сан",
+              imageUrl: "/images/tour/c1-library.jpg",
+              thumbnailUrl: "/images/tour/thumb-c1-library.jpg",
+              description: "МТЭС-ийн номын сан",
+              hotspots: [
+                { id: "c1-lib-back", type: "nav", position: { yaw: 180, pitch: -5 }, targetSceneId: "c1-corridor", tooltip: "← Коридор" },
+                { id: "c1-lib-info", type: "info", position: { yaw: 0, pitch: 10 }, title: "Номын Сан", description: "5,000 гаруй номтой сургуулийн номын сан. Тусгай унших газар, компьютерийн зам бүхий.", details: { roomCode: "C-110", equipment: ["Компьютер x10", "Принтер", "Скanner"] } },
+              ],
+            },
+          ],
+        },
+        {
+          id: 2,
+          label: "2-р давхар",
+          defaultSceneId: "c2-corridor",
+          scenes: [
+            {
+              id: "c2-corridor",
+              label: "2-р давхрын коридор (C)",
+              imageUrl: "/images/tour/c2-corridor.jpg",
+              thumbnailUrl: "/images/tour/thumb-c2-corridor.jpg",
+              defaultYaw: 0,
+              hotspots: [
+                { id: "c2-to-c201", type: "nav", position: { yaw: -70, pitch: -10 }, targetSceneId: "c2-room201", tooltip: "C201-р танхим →" },
+                { id: "c2-to-lab", type: "nav", position: { yaw: 0, pitch: -10 }, targetSceneId: "c2-lab", tooltip: "Компьютерийн лаб →" },
+              ],
+            },
+            {
+              id: "c2-room201",
+              label: "C201-р Лекцийн Танхим",
+              imageUrl: "/images/tour/c2-room201.jpg",
+              thumbnailUrl: "/images/tour/thumb-c2-room201.jpg",
+              hotspots: [
+                { id: "c2-201-back", type: "nav", position: { yaw: 180, pitch: -5 }, targetSceneId: "c2-corridor", tooltip: "← Коридор" },
+                { id: "c2-201-info", type: "info", position: { yaw: 30, pitch: 5 }, title: "C201-р Лекцийн Танхим", description: "70 суудалтай лекцийн танхим.", details: { roomCode: "C-201", capacity: 70, equipment: ["Проектор", "Интерактив самбар"] } },
+              ],
+            },
+            {
+              id: "c2-lab",
+              label: "Компьютерийн Лаб (C барилга)",
+              imageUrl: "/images/tour/c2-lab.jpg",
+              thumbnailUrl: "/images/tour/thumb-c2-lab.jpg",
+              description: "C барилгын компьютерийн дадлагын лаб",
+              hotspots: [
+                { id: "c2-lab-back", type: "nav", position: { yaw: 180, pitch: -5 }, targetSceneId: "c2-corridor", tooltip: "← Коридор" },
+                { id: "c2-lab-info", type: "info", position: { yaw: 0, pitch: 10 }, title: "Компьютерийн Лаб (C)", description: "25 компьютертэй дадлагын лаб.", details: { roomCode: "C-203", capacity: 25, equipment: ["HP компьютер x25", "Проектор"] } },
+              ],
+            },
+          ],
+        },
+        {
+          id: 3,
+          label: "3-р давхар",
+          defaultSceneId: "b3-corridor",
+          scenes: [
+            {
+              id: "b3-corridor",
+              label: "3-р давхрын коридор (C)",
+              imageUrl: "/images/tour/c3-corridor.jpg",
+              thumbnailUrl: "/images/tour/thumb-c3-corridor.jpg",
+              defaultYaw: 0,
+              hotspots: [
+                { id: "c3-to-301", type: "nav", position: { yaw: -70, pitch: -10 }, targetSceneId: "c3-room301", tooltip: "C301-р танхим →" },
+                { id: "c3-to-302", type: "nav", position: { yaw: 70, pitch: -10 }, targetSceneId: "c3-room302", tooltip: "C302-р танхим →" },
+              ],
+            },
+            {
+              id: "c3-room301",
+              label: "C301-р Лекцийн Танхим",
+              imageUrl: "/images/tour/c3-room301.jpg",
+              hotspots: [
+                { id: "c3-301-back", type: "nav", position: { yaw: 180, pitch: -5 }, targetSceneId: "c3-corridor", tooltip: "← Коридор" },
+                { id: "c3-301-info", type: "info", position: { yaw: 30, pitch: 5 }, title: "C301-р Лекцийн Танхим", description: "60 суудалтай лекцийн танхим.", details: { roomCode: "C-301", capacity: 60 } },
+              ],
+            },
+            {
+              id: "c3-room302",
+              label: "C302-р Лекцийн Танхим",
+              imageUrl: "/images/tour/c3-room302.jpg",
+              hotspots: [
+                { id: "c3-302-back", type: "nav", position: { yaw: 180, pitch: -5 }, targetSceneId: "c3-corridor", tooltip: "← Коридор" },
+                { id: "c3-302-info", type: "info", position: { yaw: 30, pitch: 5 }, title: "C302-р Лекцийн Танхим", description: "50 суудалтай лекцийн танхим.", details: { roomCode: "C-302", capacity: 50 } },
+              ],
+            },
+          ],
+        },
+        {
+          id: 4,
+          label: "4-р давхар",
+          defaultSceneId: "c4-corridor", 
+          scenes: [
+            {
+              id: "c4-corridor",
+              label: "4-р давхрын коридор (C)",
+              imageUrl: "/images/tour/c4-corridor.jpg",
+              thumbnailUrl: "/images/tour/thumb-c4-corridor.jpg",
+              defaultYaw: 0,
+              hotspots: [
+                { id: "c4-to-dept", type: "nav", position: { yaw: -60, pitch: -10 }, targetSceneId: "c4-department", tooltip: "Тэнхимийн өрөо →" },
+              ],
+            },
+            {
+              id: "c4-department",
+              label: "Электроникийн Тэнхим",
+              imageUrl: "/images/tour/c4-department.jpg",
+              hotspots: [
+                { id: "c4-dept-back", type: "nav", position: { yaw: 180, pitch: -5 }, targetSceneId: "c4-corridor", tooltip: "← Коридор" },
+                { id: "c4-dept-info", type: "info", position: { yaw: 20, pitch: 5 }, title: "Электроникийн Тэнхим", description: "МТЭС-ийн электроникийн тэнхимийн профессор нарын өрөо.", details: { roomCode: "C-401", department: "Электроникийн тэнхим" } },
+              ],
+            },
+          ],
+        },
+      ],
+    },
   ],
 };
+
 
 // ── Helper functions ─────────────────────────────────────────
 

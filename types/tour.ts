@@ -2,7 +2,7 @@
 // МТЭС 360° VR Tour — TypeScript Type Definitions
 // ============================================================
 
-export type BuildingId = "A" | "B";
+export type BuildingId = "A" | "B" | "C" | "campus"; // Барилга A, B, C болон анхны кэмпус (drone view)
 export type HotspotType = "nav" | "info" | "link";
 
 /** Spherical coordinate — yaw: -180..180, pitch: -90..90 */

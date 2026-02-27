@@ -3,13 +3,13 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Menu, X, Eye } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
-  { href: "/",        label: "Нүүр" },
-  { href: "/tour",    label: "360° VR Аялал" },
-  { href: "/about",   label: "Тухай" },
+  { href: "/", label: "Нүүр" },
+  { href: "/tour", label: "360° VR Аялал" },
+  { href: "/about", label: "Тухай" },
   { href: "/contact", label: "Холбоо барих" },
 ];
 
@@ -28,21 +28,27 @@ export function Navbar() {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        scrolled
-          ? "glass-dark shadow-lg shadow-navy-900/30"
-          : "bg-transparent"
+        scrolled ? "glass-dark shadow-lg shadow-navy-900/30" : "bg-transparent",
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-navy-600 to-navy-700 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-              <Eye className="w-5 h-5 text-white" />
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-navy-100 to-navy-100 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+              <img
+                src="/images/num-logo.png"
+                alt="logo"
+                className="w-7 h-7 object-contain"
+              />
             </div>
             <div className="hidden sm:block">
-              <p className="text-white font-bold text-sm leading-tight">МТЭС</p>
-              <p className="text-navy-200 text-xs leading-tight">Виртуал Аялал</p>
+              <p className="text-white font-bold text-sm leading-tight">
+                Монгол улсын их сургууль
+              </p>
+              <p className="text-navy-200 text-xs leading-tight">
+                МТЭС-Виртуал Аялал
+              </p>
             </div>
           </Link>
 
@@ -56,7 +62,7 @@ export function Navbar() {
                   "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
                   pathname === href
                     ? "bg-navy-600/80 text-white"
-                    : "text-gray-300 hover:text-white hover:bg-white/10"
+                    : "text-gray-300 hover:text-white hover:bg-white/10",
                 )}
               >
                 {label}
@@ -100,7 +106,7 @@ export function Navbar() {
                     "block px-4 py-2.5 rounded-lg text-sm font-medium transition-colors",
                     pathname === href
                       ? "bg-navy-600/80 text-white"
-                      : "text-gray-300 hover:text-white hover:bg-white/10"
+                      : "text-gray-300 hover:text-white hover:bg-white/10",
                   )}
                 >
                   {label}
