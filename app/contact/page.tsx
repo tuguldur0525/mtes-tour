@@ -50,21 +50,13 @@ export default function ContactPage() {
             ))}
           </div>
 
-          {/* Map placeholder */}
-          <div className="glass rounded-xl overflow-hidden min-h-72 relative">
-            <iframe
-              className="w-full h-full min-h-72"
-              src="https://maps.app.goo.gl/6JutEW4sfdvNm1EJ8"
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-            {/* Overlay pin and info */}
-            <div className="absolute top-4 right-4 bg-white/95 rounded-lg px-3 py-2 shadow-lg flex items-center gap-2 backdrop-blur-sm">
-              <MapPin className="w-4 h-4 text-red-500" />
-              <div className="text-xs">
-                <p className="font-semibold text-gray-900">47.9202, 106.9274</p>
-              </div>
+          <div className="glass rounded-xl overflow-hidden min-h-72 flex items-center justify-center">
+            <div className="text-center text-gray-500">
+              <MapPin className="w-10 h-10 mx-auto mb-2 text-navy-600" />
+              <p className="text-sm">Google Maps</p>
+              <p className="text-xs mt-1 text-gray-600">
+                47.9202° N, 106.9274° E
+              </p>
             </div>
           </div>
         </div>
