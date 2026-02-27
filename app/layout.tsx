@@ -11,6 +11,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://mtes-tour.vercel.app"),
+
   title: {
     default: "МТЭС 360° Виртуал Аялал",
     template: "%s | МТЭС Virtual Tour",
@@ -18,14 +20,30 @@ export const metadata: Metadata = {
   description:
     "Мэдээлэл Технологи Электроникийн Сургуулийн (МТЭС — МУИС) 360° виртуал аялал. " +
     "Барилга, лаб, лекцийн танхимуудыг гэрийн тавилцанаас танилцаарай.",
-  keywords: ["МТЭС", "МУИС", "виртуал аялал", "360 VR tour", "кампус", "сургууль"],
+  keywords: [
+    "МТЭС",
+    "МУИС",
+    "виртуал аялал",
+    "360 VR tour",
+    "кампус",
+    "сургууль",
+  ],
   authors: [{ name: "Мультимедиа Технологи — МТЭС" }],
   openGraph: {
     type: "website",
     locale: "mn_MN",
     siteName: "МТЭС Виртуал Аялал",
+    url: "/",
     title: "МТЭС 360° Виртуал Аялал",
     description: "МТЭС-ийн кампусыг виртуалаар аялаарай",
+    images: [
+      {
+        url: "/images/num-logo.png",
+        width: 1200,
+        height: 630,
+        alt: "MTES Virtual Tour",
+      },
+    ],
   },
 };
 
