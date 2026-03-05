@@ -35,7 +35,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-navy-100 to-navy-100 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
               <img
                 src="/images/num-logo.png"
                 alt="logo"

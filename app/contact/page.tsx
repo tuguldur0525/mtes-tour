@@ -50,15 +50,21 @@ export default function ContactPage() {
             ))}
           </div>
 
-          <div className="glass rounded-xl overflow-hidden min-h-72 flex items-center justify-center">
-            <div className="text-center text-gray-500">
-              <MapPin className="w-10 h-10 mx-auto mb-2 text-navy-600" />
-              <p className="text-sm">Google Maps</p>
-              <p className="text-xs mt-1 text-gray-600">
+          <a
+            href="https://maps.app.goo.gl/3wfhqJ4wXzVLGmRj9"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="glass rounded-xl overflow-hidden min-h-72 flex items-center justify-center group hover:border-navy-400 transition-all duration-300 cursor-pointer"
+          >
+            <div className="text-center text-gray-400 group-hover:text-navy-300 transition-colors">
+              <MapPin className="w-12 h-12 mx-auto mb-3 text-navy-400 group-hover:scale-110 transition-transform" />
+              <p className="text-sm font-semibold mb-2">Google Maps-д харах</p>
+              <p className="text-xs text-gray-500 group-hover:text-gray-400">
                 47.9202° N, 106.9274° E
               </p>
+              <p className="text-xs text-navy-300 mt-2">↗ Шинэ таб дээр нээх</p>
             </div>
-          </div>
+          </a>
         </div>
       </div>
     </div>

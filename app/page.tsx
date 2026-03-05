@@ -46,7 +46,7 @@ export default function HomePage() {
           }}
         />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 sm:py-10 pt-20 text-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 text-sm text-navy-200">
             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
@@ -62,14 +62,14 @@ export default function HomePage() {
           </h1>
 
           <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed animate-slide-up">
-            Гэрийн тавилцанаас МТЭС-ийн барилга, лаб, танхимуудыг бүрэн эргэн
-            тойрноо харж, дотоод орчинтой танилц.
+            Хүссэн газраасаа МТЭС-ийн барилга, лаб, танхимуудыг харж, дотоод
+            орчинтой танилцаарай
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up [animation-delay:200ms]">
             <Link
               href="/tour?building=campus"
-              className="group inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-navy-600 hover:bg-navy-500 text-white font-semibold text-lg transition-all duration-300 shadow-xl shadow-navy-900/50 hover:shadow-navy-600/40 hover:scale-105"
+              className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-navy-600 hover:bg-navy-500 text-white font-semibold text-lg transition-all duration-300 shadow-xl shadow-navy-900/50 hover:shadow-navy-600/40 hover:scale-105"
             >
               <Eye className="w-5 h-5" />
               Аялал Эхлүүлэх
@@ -77,7 +77,7 @@ export default function HomePage() {
             </Link>
             <Link
               href="/about"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl glass text-gray-200 font-semibold text-lg hover:text-white hover:bg-white/10 transition-all duration-300"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl glass text-gray-200 font-semibold text-lg hover:text-white hover:bg-white/10 transition-all duration-300"
             >
               Сургуулийн Тухай
             </Link>
@@ -105,9 +105,9 @@ export default function HomePage() {
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-gray-500 animate-bounce">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden flex-col items-center gap-1 text-gray-500 animate-bounce sm:flex">
           <div className="w-px h-8 bg-gradient-to-b from-transparent to-gray-500" />
-          <span className="text-xs">Доошоо гүйлгэ</span>
+          <span className="text-xs text-center">Доошоо гүйлгэ</span>
         </div>
       </section>
 
@@ -189,7 +189,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Features ─────────────────────────── */}
-      <section className="py-24 bg-navy-900">
+      <section className="py-24 bg-navy-900 border-t border-navy-700/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-white mb-4">Онцлогууд</h2>
@@ -199,7 +199,7 @@ export default function HomePage() {
               {
                 icon: "🖥️",
                 title: "Desktop & Mobile",
-                desc: "Компьютер болон утасны аль алинд бүрэн ажилладаг.",
+                desc: "Компьютер болон утасны  аль алинд бүрэн ажилладаг.",
               },
               {
                 icon: "📱",
