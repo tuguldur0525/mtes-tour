@@ -62,7 +62,6 @@ export default function ContactPage() {
               <p className="text-xs text-gray-500 group-hover:text-gray-400">
                 47.9202° N, 106.9274° E
               </p>
-              <p className="text-xs text-navy-300 mt-2">↗ Шинэ таб дээр нээх</p>
             </div>
           </a>
         </div>
