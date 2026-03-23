@@ -42,7 +42,7 @@ export function Navbar() {
                 className="w-7 h-7 object-contain"
               />
             </div>
-            <div className="hidden sm:block">
+            <div className="sm:block">
               <p className="text-white font-bold text-sm leading-tight">
                 Монгол улсын их сургууль
               </p>
