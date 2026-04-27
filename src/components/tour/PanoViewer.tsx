@@ -250,7 +250,7 @@ export function PanoViewer({
             isFirstLoad.current = false;
             setTimeout(() => {
               playTinyPlanetIntro(viewer, scene.defaultZoom ?? 100, 2500);
-            }, 1200);
+            }, 1600);
           } else {
             isFirstLoad.current = false;
           }
@@ -324,7 +324,7 @@ export function PanoViewer({
         if (isTinyPlanet) {
           viewer.setOption("fisheye" as never, 2 as never);
           setTimeout(() => {
-            playTinyPlanetIntro(viewer, scene.defaultZoom ?? 50, 2500);
+            playTinyPlanetIntro(viewer, scene.defaultZoom ?? 50, 4000);
           }, 400);
         } else {
           viewer.setOption("fisheye" as never, false as never);

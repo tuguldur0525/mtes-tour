@@ -11,7 +11,16 @@ import {
 export const metadata: Metadata = {
   title: "Сургуулийн Тухай",
   description:
-    "МТЭС-ийн тухай мэдээлэл — тэнхимүүд, сургалтын хөтөлбөр, танилцуулга",
+    "МТЭС — Мэдээллийн Технологи, Электроникийн Сургууль. " +
+    "МУИС-ийн харьяа сургуулийн тэнхимүүд, сургалтын хөтөлбөр, " +
+    "профессор багш нарын танилцуулга. 3000+ оюутан, 10 хөтөлбөр.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "МТЭС — Сургуулийн Тухай",
+    description:
+      "МУИС-ийн харьяа Мэдээллийн Технологи, Электроникийн Сургуулийн танилцуулга.",
+    url: "/about",
+  },
 };
 
 const DEPARTMENTS = [
@@ -48,7 +57,6 @@ const DEPARTMENTS = [
 export default function AboutPage() {
   return (
     <div className="min-h-screen pt-20 pb-16">
-      {/* Header */}
       <div className="bg-gradient-to-b from-navy-800/50 to-transparent py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl font-bold text-white mb-4">
@@ -63,7 +71,6 @@ export default function AboutPage() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-16">
-        {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
             { icon: Users, value: "3,000+", label: "Оюутан" },
@@ -79,7 +86,6 @@ export default function AboutPage() {
           ))}
         </div>
 
-        {/* Departments */}
         <div>
           <h2 className="text-2xl font-bold text-white mb-6">Тэнхимүүд</h2>
           <div className="space-y-4">
