@@ -26,7 +26,7 @@ export function TourHUD({ building, floor, scene }: TourHUDProps) {
   }
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 z-20">
+    <div className="relative bottom-0 left-0 right-0 z-20">
       {/* Location breadcrumb */}
       <div className="flex items-center justify-between px-4 py-3 glass-dark border-t border-navy-700/50">
         <div className="flex items-center gap-2 text-sm">
