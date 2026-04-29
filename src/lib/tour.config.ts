@@ -382,7 +382,7 @@ const BUILDING_A: TourBuilding = {
           
           hotspots: [
             navHotspot("nav-a2-01a", "a1-04", "Буцах", 80, -20),
-            navHotspot("nav-a1-04b", "a1-06", "3-р давхар руу гарах", 95, 5),
+            navHotspot("nav-a1-04b", "a3-01", "3-р давхар руу гарах", 95, 5),
             navHotspot("nav-a2-02", "a2-02", "Коридор", 180),
           ],
         },
@@ -509,7 +509,7 @@ const BUILDING_A: TourBuilding = {
           hotspots: [
             navHotspot("nav-a2-07b", "a2-06", "Буцах", 0),
             navHotspot("nav-a2-08a", "a1-08", "1-р давхар руу буух", -100, -20), 
-            navHotspot("nav-a2-08b", "a2-10", "3-р давхарт гарах", -80),
+            navHotspot("nav-a2-08b", "a3-10", "3-р давхарт гарах", -80),
           ],
 
           defaultZoom: 0,
@@ -538,50 +538,56 @@ const BUILDING_A: TourBuilding = {
       scenes: [
         {
           id: "a3-01",
-          label: "Шатны буудал 3Д",
-          panoramaUrl: "/panoramas/A/a3-01.jpg",
+          label: "3-р давхар хойд шат",
+          panoramaUrl: "/panoramas/A3/a3-01.jpg",
           description: "3-р давхарт гарсан шатны буудал",
-          hotspots: [navHotspot("nav-a3-02", "a3-02", "Коридор", 0)],
-        },
-        {
-          id: "a3-02",
-          label: "3-р давхрын коридор",
-          panoramaUrl: "/panoramas/A/a3-02.jpg",
-          description: "3-р давхрын голч коридор",
+          defaultYaw: -120,
+          defaultZoom: 0,
           hotspots: [
-            navHotspot("nav-a3-01", "a3-01", "Буцах", 180),
-            navHotspot("nav-a3-03", "a3-03", "301-р анги", 0),
+            navHotspot("nav-a3-12", "a2-01", "2-р давхар руу буух", 180, -20),
+            navHotspot("nav-a3-13", "a4-01", "4-р давхарт гарах", -160, 8),
+            navHotspot("nav-a3-14", "a3-02", "304-р анги", 0),
+            navHotspot("nav-a3-15", "a3-04", "Коридор", -80)
+
           ],
         },
         {
-          id: "a3-03",
-          label: "301-р анги",
-          panoramaUrl: "/panoramas/A/a3-03.jpg",
-          description: "Лекцийн танхим — 301",
-          hotspots: [navHotspot("nav-a3-02b", "a3-02", "Буцах", 180)],
-          infoHotspots: [
-            {
-              id: "info-a3-301",
-              type: "info",
-              yaw: 90,
-              pitch: 0,
-              title: "Лекцийн танхим 301",
-              description: "Харьцангуй жижиг лекцийн танхим, шинэчлэгдсэн тоног.",
-              details: { roomCode: "A-301", capacity: 60, equipment: ["Проектор", "Чаргуур"] },
-            },
+          id: "a3-02",
+          label: "304-р анги",
+          panoramaUrl: "/panoramas/A3/a3-02.jpg",
+          description: "304-р анги дотор",
+          defaultYaw: 30,
+          hotspots: [
+            navHotspot("nav-a3-01", "a3-01", "Буцах", -90),
           ],
         },
         {
           id: "a3-04",
-          label: "302-р анги",
-          panoramaUrl: "/panoramas/A/a3-04.jpg",
-          description: "Семинарын танхим — 302",
-          hotspots: [navHotspot("nav-a3-03b", "a3-03", "Буцах", 180)],
+          label: "Коридор",
+          panoramaUrl: "/panoramas/A3/a3-04.jpg",
+          description: "Коридор",
+          defaultYaw: 20, 
+          hotspots: [navHotspot("nav-a3-02b", "a3-01", "Буцах", 180),
+              navHotspot("nav-a3-03b", "a3-03", "303-р анги", 90),
+              navHotspot("nav-a3-03d", "a3-06", "Коридор", 0),
+          ],
+          
+        },
+        {
+          id: "a3-03",
+          label: "303-р анги",
+          panoramaUrl: "/panoramas/A3/a3-03.jpg",
+          description: "Семинарын танхим — 303",
+          defaultYaw: 180,
+          hotspots: [
+            navHotspot("nav-a3-03b", "a3-04", "Буцах", 60),
+            
+          ],
           infoHotspots: [
             {
               id: "info-a3-302",
               type: "info",
-              yaw: 90,
+              yaw: 180,
               pitch: 0,
               title: "Семинарын анги 302",
               description: "",
@@ -591,10 +597,12 @@ const BUILDING_A: TourBuilding = {
         },
         {
           id: "a3-05",
-          label: "Лаборатори 3А",
-          panoramaUrl: "/panoramas/A/a3-05.jpg",
-          description: "Компьютерийн лаборатори 3А",
-          hotspots: [navHotspot("nav-a3-04b", "a3-04", "Буцах", 180)],
+          label: "302-р анги",
+          panoramaUrl: "/panoramas/A3/a3-05.jpg",
+          description: "Компьютерийн лаборатори 302",
+          defaultYaw: 0,
+          defaultZoom: 20,
+          hotspots: [navHotspot("nav-a3-04b", "a3-06", "Буцах", -90)],
           infoHotspots: [
             {
               id: "info-a3-lab3a",
@@ -609,64 +617,33 @@ const BUILDING_A: TourBuilding = {
         },
         {
           id: "a3-06",
-          label: "Лаборатори 3Б",
-          panoramaUrl: "/panoramas/A/a3-06.jpg",
-          description: "Компьютерийн лаборатори 3Б",
-          hotspots: [navHotspot("nav-a3-05b", "a3-05", "Буцах", 180)],
-          infoHotspots: [
-            {
-              id: "info-a3-lab3b",
-              type: "info",
-              yaw: 45,
-              pitch: 0,
-              title: "Компьютерийн лаборатори 3Б",
-              description: "Сүлжээ, холбооны лаборатори.",
-              details: { roomCode: "A-LAB3B", capacity: 25, equipment: ["Сүлжээний тоног", "Компьютер 25ш"] },
-            },
+          label: "Коридор",
+          panoramaUrl: "/panoramas/A3/a3-06.jpg",
+          description: "3-р давхрын коридор",
+          defaultYaw: 180,
+          hotspots: [navHotspot("nav-a3-05b", "a3-04", "Буцах", 0),
+            navHotspot("nav-a3-05p", "a3-07", "Коридор", 180),
+            navHotspot("nav-a3-05l", "a3-05", "302-р анги", -90),
           ],
+          
         },
         {
           id: "a3-07",
-          label: "303-р анги",
-          panoramaUrl: "/panoramas/A/a3-07.jpg",
-          description: "Дасгалын анги — 303",
-          hotspots: [navHotspot("nav-a3-06b", "a3-06", "Буцах", 180)],
-          infoHotspots: [
-            {
-              id: "info-a3-303",
-              type: "info",
-              yaw: 90,
-              pitch: 0,
-              title: "Дасгалын анги 303",
-              description: "",
-              details: { roomCode: "A-303", capacity: 40 },
-            },
-          ],
-        },
-        {
-          id: "a3-08",
-          label: "Профессорын өрөө 3А",
-          panoramaUrl: "/panoramas/A/a3-08.jpg",
-          description: "3-р давхрын багшийн өрөө",
-          hotspots: [navHotspot("nav-a3-07b", "a3-07", "Буцах", 180)],
-          infoHotspots: [
-            {
-              id: "info-a3-prof",
-              type: "info",
-              yaw: 0,
-              pitch: 0,
-              title: "Багшийн өрөө 3А",
-              description: "Физикийн тэнхимийн ажлын өрөө.",
-              details: { roomCode: "A-3A", department: "Физикийн тэнхим" },
-            },
-          ],
+          label: "Коридор",
+          panoramaUrl: "/panoramas/A3/a3-07.jpg",
+          description: "3-р давхрын коридор",
+          hotspots: [
+            navHotspot("nav-a3-06b", "a3-10", "3-р давхарын урд шат", 180),
+          navHotspot("nav-a3-06g", "a3-09", "301-р анги", -90),
+        navHotspot("nav-a3-06r", "a3-06", "Буцах", 0)],
+
         },
         {
           id: "a3-09",
-          label: "Хурлын танхим 3",
-          panoramaUrl: "/panoramas/A/a3-09.jpg",
-          description: "3-р давхрын хурлын танхим",
-          hotspots: [navHotspot("nav-a3-08b", "a3-08", "Буцах", 180)],
+          label: "301-р анги",
+          panoramaUrl: "/panoramas/A3/a3-09.jpg",
+          description: "301-р анги дотор",
+          hotspots: [navHotspot("nav-a3-08b", "a3-07", "Буцах", -90)],
           infoHotspots: [
             {
               id: "info-a3-conf",
@@ -681,10 +658,13 @@ const BUILDING_A: TourBuilding = {
         },
         {
           id: "a3-10",
-          label: "Тавилгын хонгил",
-          panoramaUrl: "/panoramas/A/a3-10.jpg",
-          description: "3-р давхрын хонгилын үзэмж",
-          hotspots: [navHotspot("nav-a3-09b", "a3-09", "Буцах", 180)],
+          label: "3-р давхрын урд шат",
+          panoramaUrl: "/panoramas/A3/a3-10.jpg",
+          description: "3-р давхрын урд шатн",
+          hotspots: [navHotspot("nav-a3-09b", "a3-07", "Буцах", 0),
+            navHotspot("nav-a3-10a", "a2-08", "2-р давхар руу буух", -100, -20),
+            navHotspot("nav-a3-10b", "a4-10", "4-р давхарт гарах", -85, 8),
+          ],
         },
       ],
     },
@@ -692,34 +672,39 @@ const BUILDING_A: TourBuilding = {
     // ── Floor 4 ──────────────────────────────
     {
       id: 4,
-      label: "4-р давхар",
+      label: "4-р давхар ",
       defaultSceneId: "a4-01",
       mapImageUrl: "/images/maps/a-floor4.png",
       scenes: [
         {
           id: "a4-01",
-          label: "Шатны буудал 4Д",
-          panoramaUrl: "/panoramas/A/a4-01.jpg",
-          description: "4-р давхарт гарсан шатны буудал",
-          hotspots: [navHotspot("nav-a4-02", "a4-02", "Коридор", 0)],
+          label: "4-р давхар хойд шат",
+          panoramaUrl: "/panoramas/A4/a4-01.jpg",
+          description: "4-р давхарын хойд шат",
+          defaultYaw: -40,
+          defaultPitch: -10,
+          defaultZoom: 0,
+          hotspots: [navHotspot("nav-a4-02", "a4-02", "Коридор", 0),
+            navHotspot("nav-a4-03", "a3-01", "3-р давхарт буух", -100, -20),
+          ],
         },
         {
           id: "a4-02",
           label: "4-р давхрын коридор",
-          panoramaUrl: "/panoramas/A/a4-02.jpg",
+          panoramaUrl: "/panoramas/A4/a4-02.jpg",
           description: "4-р давхрын голч коридор",
           hotspots: [
-            navHotspot("nav-a4-01", "a4-01", "Буцах", 180),
-            navHotspot("nav-a4-03", "a4-03", "401-р анги", 0),
-            navHotspot("nav-a4-06", "a4-06", "Дэвшилтэт лаб", 90),
+            navHotspot("nav-a4-01", "a4-01", "Буцах", 175),
+            navHotspot("nav-a4-03", "a4-04", "Коридор", -5),
+            navHotspot("nav-a4-06", "a4-03", "403-р анги", 60),
           ],
         },
         {
           id: "a4-03",
-          label: "401-р анги",
-          panoramaUrl: "/panoramas/A/a4-03.jpg",
-          description: "Лекцийн танхим — 401",
-          hotspots: [navHotspot("nav-a4-02b", "a4-02", "Буцах", 180)],
+          label: "403-р анги",
+          panoramaUrl: "/panoramas/A4/a4-03.jpg",
+          description: "403-р анги дотор",
+          hotspots: [navHotspot("nav-a4-02b", "a4-02", "Буцах", -70)],
           infoHotspots: [
             {
               id: "info-a4-401",
@@ -734,28 +719,20 @@ const BUILDING_A: TourBuilding = {
         },
         {
           id: "a4-04",
-          label: "402-р анги",
-          panoramaUrl: "/panoramas/A/a4-04.jpg",
-          description: "Семинарын танхим — 402",
-          hotspots: [navHotspot("nav-a4-03b", "a4-03", "Буцах", 180)],
-          infoHotspots: [
-            {
-              id: "info-a4-402",
-              type: "info",
-              yaw: 90,
-              pitch: 0,
-              title: "Семинарын анги 402",
-              description: "",
-              details: { roomCode: "A-402", capacity: 35 },
-            },
+          label: "Коридор",
+          panoramaUrl: "/panoramas/A4/a4-04.jpg",
+          description: "4-р давхрын коридор",
+          hotspots: [navHotspot("nav-a4-03b", "a4-02", "Буцах", 180),
+            navHotspot("nav-a4-04a", "a4-05", "404-р анги", 90),
+            navHotspot("nav-a4-04c", "a4-06", "Урагш явах", 0),
           ],
         },
         {
           id: "a4-05",
           label: "403-р анги",
-          panoramaUrl: "/panoramas/A/a4-05.jpg",
+          panoramaUrl: "/panoramas/A4/a4-05.jpg",
           description: "Дасгалын анги — 403",
-          hotspots: [navHotspot("nav-a4-04b", "a4-04", "Буцах", 180)],
+          hotspots: [navHotspot("nav-a4-04b", "a4-04", "Буцах", -90)],
           infoHotspots: [
             {
               id: "info-a4-403",
@@ -770,33 +747,21 @@ const BUILDING_A: TourBuilding = {
         },
         {
           id: "a4-06",
-          label: "Дэвшилтэт лаб",
-          panoramaUrl: "/panoramas/A/a4-06.jpg",
-          description: "Дэвшилтэт технологийн лаборатори",
-          hotspots: [navHotspot("nav-a4-02c", "a4-02", "Буцах", 180)],
-          infoHotspots: [
-            {
-              id: "info-a4-advlab",
-              type: "info",
-              yaw: 0,
-              pitch: 0,
-              title: "Дэвшилтэт технологийн лаб",
-              description: "AI, робот, VR судалгааны лаборатори.",
-              details: {
-                roomCode: "A-ADV-LAB",
-                capacity: 20,
-                department: "Судалгааны тэнхим",
-                equipment: ["VR headset", "3D принтер", "Робот тоног"],
-              },
-            },
-          ],
+          label: "Коридор",
+          panoramaUrl: "/panoramas/A4/a4-06.jpg",
+          description: "4-р давхрын коридор",
+          hotspots: [navHotspot("nav-a4-02c", "a4-04", "Буцах", 76),
+            navHotspot("nav-a4-06a", "a4-07", "Урагш явах", -106)
+          ],        
         },
         {
           id: "a4-07",
-          label: "Судалгааны өрөө 4А",
-          panoramaUrl: "/panoramas/A/a4-07.jpg",
-          description: "Судалгааны баг, докторантурын өрөө",
-          hotspots: [navHotspot("nav-a4-06b", "a4-06", "Буцах", 180)],
+          label: "Коридор",
+          panoramaUrl: "/panoramas/A4/a4-07.jpg",
+          description: "4-р давхрын коридор",
+          hotspots: [navHotspot("nav-a4-06b", "a4-06", "Буцах", 90),
+              navHotspot("nav-a4-07a", "a4-08", "Урагш явах", -90)
+          ],
           infoHotspots: [
             {
               id: "info-a4-research",
@@ -811,10 +776,13 @@ const BUILDING_A: TourBuilding = {
         },
         {
           id: "a4-08",
-          label: "Хурлын танхим 4",
-          panoramaUrl: "/panoramas/A/a4-08.jpg",
-          description: "4-р давхрын хурлын танхим",
-          hotspots: [navHotspot("nav-a4-07b", "a4-07", "Буцах", 180)],
+          label: "Коридор",
+          panoramaUrl: "/panoramas/A4/a4-08.jpg",
+          description: "4-р давхрын коридор",
+          hotspots: [navHotspot("nav-a4-07b", "a4-07", "Буцах", 90),
+              navHotspot("nav-a4-08a", "a4-09", "404-р анги", 0),
+              navHotspot("nav-a4-08c", "a4-10", "Урд шат", -90)
+          ],
           infoHotspots: [
             {
               id: "info-a4-conf",
@@ -829,10 +797,10 @@ const BUILDING_A: TourBuilding = {
         },
         {
           id: "a4-09",
-          label: "Декант",
-          panoramaUrl: "/panoramas/A/a4-09.jpg",
-          description: "Деканатын тасаг",
-          hotspots: [navHotspot("nav-a4-08b", "a4-08", "Буцах", 180)],
+          label: "404-р анги",
+          panoramaUrl: "/panoramas/A4/a4-09.jpg",
+          description: "404-р анги дотор",
+          hotspots: [navHotspot("nav-a4-08b", "a4-08", "Буцах", -80)],
           infoHotspots: [
             {
               id: "info-a4-dean",
@@ -847,10 +815,15 @@ const BUILDING_A: TourBuilding = {
         },
         {
           id: "a4-10",
-          label: "4-р давхрын тагт",
-          panoramaUrl: "/panoramas/A/a4-10.jpg",
-          description: "4-р давхрын тагтнаас харагдах дүр",
-          hotspots: [navHotspot("nav-a4-09b", "a4-09", "Буцах", 180)],
+          label: "4-р давхрын урд шат",
+          panoramaUrl: "/panoramas/A4/a4-10.jpg",
+          description: "4-р давхрын урд шат",
+          defaultYaw: 140,
+          defaultZoom: 0,
+          defaultPitch: -10,
+          hotspots: [navHotspot("nav-a4-09b", "a4-08", "Буцах", 180),
+              navHotspot("nav-a4-10a", "a3-10", "3-р давхарт буух", 85, -20),
+          ],
         },
       ],
     },
@@ -966,7 +939,15 @@ const BUILDING_B: TourBuilding = {
             },
           ],
         },
+      ],
+    },
         // floor - 2
+      {
+      id: 2,
+      label: "2-р давхар",
+      defaultSceneId: "b1-04",
+      mapImageUrl: "/images/maps/b-floor2.png",
+      scenes: [
         {
           id: "b1-04",
           label: "2-давхарын зүүн жигүүр",

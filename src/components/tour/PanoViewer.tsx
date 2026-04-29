@@ -8,14 +8,21 @@
  *  - defaultYaw / defaultPitch / defaultZoom per scene
  *  - Neighbour image prefetch after load
  *  - Info hotspots: minimal frosted-glass boards, semi-transparent
+ *  - Gyroscope support on mobile via GyroscopePlugin
  */
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 import type { TourScene, NavHotspot, InfoHotspot } from "@/types/tour";
 
 type PSVViewer = import("@photo-sphere-viewer/core").Viewer;
 type MarkersPlugin =
   import("@photo-sphere-viewer/markers-plugin").MarkersPlugin;
+type GyroscopePlugin =
+  import("@photo-sphere-viewer/gyroscope-plugin").GyroscopePlugin;
+
+// ── Tiny Planet timing ─────────────────────────────────────────────────────────
+const PLANET_HOLD_MS = 2500;
+const PLANET_ANIM_MS = 5000;
 
 interface PanoViewerProps {
   scene: TourScene;
@@ -38,13 +45,10 @@ function svgToDataUrl(svg: string) {
 const NAV_ICON = svgToDataUrl(NAV_SVG);
 
 // ── Minimal transparent board ──────────────────────────────────────────────────
-// Design: frosted glass feel — very low opacity fill, thin single border line,
-// no gradients, no decorative elements. Just the essential text.
 function makeBoardSvg(hs: InfoHotspot): string {
   const W = 200,
     H = 72;
 
-  // One detail line — capacity wins over department
   let detail = "";
   if (hs.details?.roomCode) detail += hs.details.roomCode;
   if (hs.details?.capacity)
@@ -52,55 +56,32 @@ function makeBoardSvg(hs: InfoHotspot): string {
   if (hs.details?.department && !hs.details?.capacity)
     detail += (detail ? "  ·  " : "") + hs.details.department;
 
-  // Truncate title if needed
   const title = hs.title.length > 20 ? hs.title.slice(0, 19) + "…" : hs.title;
 
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
-  <defs>
-    <filter id="blur${hs.id}" x="-5%" y="-5%" width="110%" height="110%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="0.8"/>
-    </filter>
-  </defs>
-
-  <!-- Frosted glass background: very transparent dark -->
-  <rect width="${W}" height="${H}" rx="10"
-        fill="rgba(8,20,35,0.52)"/>
-
-  <!-- Single thin border — top accent only -->
-  <rect x="0" y="0" width="${W}" height="2" rx="1"
-        fill="rgba(46,117,182,0.70)"/>
-
-  <!-- Outer border hairline -->
+  <rect width="${W}" height="${H}" rx="10" fill="rgba(8,20,35,0.52)"/>
+  <rect x="0" y="0" width="${W}" height="2" rx="1" fill="rgba(46,117,182,0.70)"/>
   <rect x="0.75" y="0.75" width="${W - 1.5}" height="${H - 1.5}" rx="9.5"
         fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-
-  <!-- Title -->
   <text x="16" y="30"
         font-family="system-ui,-apple-system,sans-serif"
         font-size="14" font-weight="600"
-        fill="rgba(255,255,255,0.92)"
-        letter-spacing="-0.3">${title}</text>
-
-  <!-- Detail row -->
+        fill="rgba(255,255,255,0.92)" letter-spacing="-0.3">${title}</text>
   ${
     detail
       ? `
   <text x="16" y="50"
         font-family="system-ui,-apple-system,sans-serif"
         font-size="11" font-weight="400"
-        fill="rgba(160,190,220,0.65)"
-        letter-spacing="0">${detail}</text>
-  `
+        fill="rgba(160,190,220,0.65)">${detail}</text>`
       : ""
   }
-
-  <!-- Tap hint — very subtle, right-aligned -->
   <text x="${W - 14}" y="50"
         font-family="system-ui,-apple-system,sans-serif"
         font-size="10" font-weight="300"
-        fill="rgba(224,237,244,0.60)"
-        text-anchor="end">Дэлгэрэнгүй →</text>
+        fill="rgba(46,117,182,0.60)"
+        text-anchor="end">дэлгэрэнгүй →</text>
 </svg>`;
 
   return svgToDataUrl(svg);
@@ -116,11 +97,15 @@ function prefetchImage(url: string) {
   document.head.appendChild(link);
 }
 
-// ── Tiny Planet animation ──────────────────────────────────────────────────────
+// ── Tiny Planet ────────────────────────────────────────────────────────────────
+function easeInOutSine(t: number) {
+  return -(Math.cos(Math.PI * t) - 1) / 2;
+}
+
 function playTinyPlanetIntro(
   viewer: PSVViewer,
   targetZoom: number,
-  duration = 2500,
+  duration: number,
 ) {
   viewer.setOption("fisheye" as never, 2 as never);
   viewer.rotate({ yaw: 0, pitch: -Math.PI / 2 });
@@ -129,13 +114,9 @@ function playTinyPlanetIntro(
   const startTime = performance.now();
   const startPitch = -Math.PI / 2;
 
-  function easeOutCubic(t: number) {
-    return 1 - Math.pow(1 - t, 3);
-  }
-
   function step(now: number) {
     const t = Math.min((now - startTime) / duration, 1);
-    const e = easeOutCubic(t);
+    const e = easeInOutSine(t);
     viewer.setOption("fisheye" as never, (2 * (1 - e)) as never);
     viewer.zoom(targetZoom * e);
     viewer.rotate({ yaw: 0, pitch: startPitch * (1 - e) });
@@ -143,6 +124,19 @@ function playTinyPlanetIntro(
   }
 
   requestAnimationFrame(step);
+}
+
+// ── Check if device has a gyroscope ───────────────────────────────────────────
+// DeviceOrientationEvent exists on all mobile browsers but only fires
+// real data if there's actual hardware. We check for it once on mount.
+function deviceHasGyroscope(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    (typeof (
+      DeviceOrientationEvent as unknown as { requestPermission?: unknown }
+    ).requestPermission === "function" ||
+      "ondeviceorientation" in window)
+  );
 }
 
 // ── Component ──────────────────────────────────────────────────────────────────
@@ -155,8 +149,13 @@ export function PanoViewer({
   const containerRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<PSVViewer | null>(null);
   const markersRef = useRef<MarkersPlugin | null>(null);
+  const gyroRef = useRef<GyroscopePlugin | null>(null);
   const readyFiredRef = useRef(false);
   const isFirstLoad = useRef(true);
+
+  // Gyroscope UI state
+  const [gyroAvailable, setGyroAvailable] = useState(false);
+  const [gyroActive, setGyroActive] = useState(false);
 
   const onReadyRef = useRef(onReady);
   const onNavigateRef = useRef(onNavigate);
@@ -175,7 +174,6 @@ export function PanoViewer({
   const buildMarkers = useCallback((s: TourScene) => {
     const markers: object[] = [];
 
-    // Nav hotspots — arrow icon
     (s.hotspots ?? []).forEach((hs: NavHotspot) => {
       const pitchAbs = Math.abs(hs.pitch ?? -5);
       const scale = Math.max(0.65, 1 - pitchAbs / 90);
@@ -191,7 +189,6 @@ export function PanoViewer({
       });
     });
 
-    // Info hotspots — minimal transparent board
     (s.infoHotspots ?? []).forEach((hs: InfoHotspot) => {
       markers.push({
         id: hs.id,
@@ -206,6 +203,39 @@ export function PanoViewer({
     return markers;
   }, []);
 
+  // ── Gyroscope toggle handler ───────────────────────────────────────────────
+  const handleGyroToggle = useCallback(async () => {
+    const gyro = gyroRef.current;
+    if (!gyro) return;
+
+    // iOS 13+ requires explicit permission request
+    const DevOrient = DeviceOrientationEvent as unknown as {
+      requestPermission?: () => Promise<string>;
+    };
+
+    if (typeof DevOrient.requestPermission === "function") {
+      try {
+        const permission = await DevOrient.requestPermission();
+        if (permission !== "granted") {
+          alert(
+            "Гироскоп ашиглахыг зөвшөөрөөгүй байна. Тохиргооноос зөвшөөрнө үү.",
+          );
+          return;
+        }
+      } catch {
+        return;
+      }
+    }
+
+    if (gyroActive) {
+      gyro.stop();
+      setGyroActive(false);
+    } else {
+      gyro.start();
+      setGyroActive(true);
+    }
+  }, [gyroActive]);
+
   // ── Init viewer once ───────────────────────────────────────────────────────
   useEffect(() => {
     if (!containerRef.current) return;
@@ -215,6 +245,8 @@ export function PanoViewer({
       const { Viewer } = await import("@photo-sphere-viewer/core");
       const { MarkersPlugin } =
         await import("@photo-sphere-viewer/markers-plugin");
+      const { GyroscopePlugin } =
+        await import("@photo-sphere-viewer/gyroscope-plugin");
 
       if (destroyed || !containerRef.current) return;
 
@@ -235,11 +267,26 @@ export function PanoViewer({
         loadingTxt: "Ачаалж байна...",
         touchmoveTwoFingers: false,
         mousewheelCtrlKey: false,
-        plugins: [[MarkersPlugin, { markers: buildMarkers(scene) }]],
+        plugins: [
+          [MarkersPlugin, { markers: buildMarkers(scene) }],
+          // GyroscopePlugin — touchmove: false means gyro and touch don't conflict
+          [
+            GyroscopePlugin,
+            {
+              touchmove: false, // user can still drag manually while gyro is on
+              absolutePosition: false, // relative mode — more natural feeling
+              roll: false, // don't roll the horizon (keeps it level)
+            },
+          ],
+        ],
       });
 
       viewerRef.current = viewer;
       markersRef.current = viewer.getPlugin<MarkersPlugin>(MarkersPlugin);
+      gyroRef.current = viewer.getPlugin<GyroscopePlugin>(GyroscopePlugin);
+
+      // Show gyro button if device supports it
+      if (deviceHasGyroscope()) setGyroAvailable(true);
 
       viewer.addEventListener("ready", () => {
         if (!readyFiredRef.current) {
@@ -249,8 +296,12 @@ export function PanoViewer({
           if (isTinyPlanet && isFirstLoad.current) {
             isFirstLoad.current = false;
             setTimeout(() => {
-              playTinyPlanetIntro(viewer, scene.defaultZoom ?? 100, 2500);
-            }, 1600);
+              playTinyPlanetIntro(
+                viewer,
+                scene.defaultZoom ?? 100,
+                PLANET_ANIM_MS,
+              );
+            }, PLANET_HOLD_MS);
           } else {
             isFirstLoad.current = false;
           }
@@ -274,6 +325,7 @@ export function PanoViewer({
 
     return () => {
       destroyed = true;
+      gyroRef.current = null;
       viewerRef.current?.destroy();
       viewerRef.current = null;
       markersRef.current = null;
@@ -305,9 +357,7 @@ export function PanoViewer({
           pitch: `${scene.defaultPitch ?? 0}deg`,
         };
       }
-      if (scene.defaultZoom !== undefined) {
-        options.zoom = scene.defaultZoom;
-      }
+      if (scene.defaultZoom !== undefined) options.zoom = scene.defaultZoom;
     } else {
       options.position = { yaw: "0deg", pitch: "-90deg" };
       options.zoom = 0;
@@ -320,16 +370,18 @@ export function PanoViewer({
           readyFiredRef.current = true;
           onReadyRef.current();
         }
-
         if (isTinyPlanet) {
           viewer.setOption("fisheye" as never, 2 as never);
           setTimeout(() => {
-            playTinyPlanetIntro(viewer, scene.defaultZoom ?? 50, 4000);
-          }, 400);
+            playTinyPlanetIntro(
+              viewer,
+              scene.defaultZoom ?? 50,
+              PLANET_ANIM_MS,
+            );
+          }, PLANET_HOLD_MS);
         } else {
           viewer.setOption("fisheye" as never, false as never);
         }
-
         const s = scene as TourScene & { preloadUrls?: string[] };
         (s.preloadUrls ?? []).forEach(prefetchImage);
       })
@@ -350,9 +402,58 @@ export function PanoViewer({
 
   return (
     <div
-      ref={containerRef}
       className="absolute inset-0 w-full h-full"
       aria-label={`360° панорама — ${scene.label}`}
-    />
+    >
+      {/* PSV container */}
+      <div ref={containerRef} className="absolute inset-0 w-full h-full" />
+
+      {/* ── Gyroscope toggle button — mobile only ─────────────────────────── */}
+      {gyroAvailable && (
+        <button
+          onClick={handleGyroToggle}
+          title={gyroActive ? "Гироскоп унтраах" : "Гироскоп асаах"}
+          className={`
+            absolute bottom-14 right-3 z-30
+            w-10 h-10 rounded-xl
+            flex items-center justify-center
+            transition-all duration-200 shadow-lg
+            sm:bottom-16
+            ${
+              gyroActive
+                ? "bg-navy-500 text-white ring-2 ring-navy-300 shadow-navy-500/40"
+                : "glass-dark text-gray-300 hover:text-white"
+            }
+          `}
+        >
+          {/* Phone + motion arc icon */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            {/* Phone body */}
+            <rect x="7" y="2" width="10" height="18" rx="2" />
+            {/* Motion arcs */}
+            <path
+              d="M2 9c1-2.5 3-4 5-4"
+              opacity={gyroActive ? "1" : "0.4"}
+              stroke={gyroActive ? "#7ab8e8" : "currentColor"}
+            />
+            <path
+              d="M22 9c-1-2.5-3-4-5-4"
+              opacity={gyroActive ? "1" : "0.4"}
+              stroke={gyroActive ? "#7ab8e8" : "currentColor"}
+            />
+          </svg>
+        </button>
+      )}
+    </div>
   );
 }
