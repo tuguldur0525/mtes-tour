@@ -1,21 +1,17 @@
+const isDev = process.env.NODE_ENV === "development";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // ── PSV package transpilation ──────────────────────────────────────────────
   transpilePackages: [
     "@photo-sphere-viewer/core",
     "@photo-sphere-viewer/markers-plugin",
   ],
 
-  // ── Compression ────────────────────────────────────────────────────────────
   compress: true,
 
-  // ── Cache headers ──────────────────────────────────────────────────────────
-  // Panorama JPGs are large — tell Vercel CDN to cache them aggressively.
-  // After the first visitor loads a scene, everyone else gets it from the edge.
   async headers() {
-    return [
+    const baseHeaders = [
       {
-        // Panorama images — immutable (filenames never change), cache 1 year
         source: "/panoramas/:path*",
         headers: [
           {
@@ -25,7 +21,6 @@ const nextConfig = {
         ],
       },
       {
-        // Thumbnails, maps, logos — cache 30 days
         source: "/images/:path*",
         headers: [
           {
@@ -34,8 +29,17 @@ const nextConfig = {
           },
         ],
       },
+    ];
+
+    // 🔥 DEV үед Next.js internal cache-ийг оролдохгүй
+    if (isDev) {
+      return baseHeaders;
+    }
+
+    // ✅ PROD үед full optimization
+    return [
+      ...baseHeaders,
       {
-        // Next.js JS/CSS bundles are content-hashed — safe to cache forever
         source: "/_next/static/:path*",
         headers: [
           {
@@ -47,7 +51,6 @@ const nextConfig = {
     ];
   },
 
-  // ── Reduce bundle size ─────────────────────────────────────────────────────
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],
   },
