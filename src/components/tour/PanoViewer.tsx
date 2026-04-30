@@ -77,11 +77,12 @@ function makeBoardSvg(hs: InfoHotspot): string {
         fill="rgba(160,190,220,0.65)">${detail}</text>`
       : ""
   }
-  <text x="${W - 14}" y="50"
+  <text x="${W - 14}" y="68"
         font-family="system-ui,-apple-system,sans-serif"
         font-size="10" font-weight="300"
-        fill="rgba(46,117,182,0.60)"
-        text-anchor="end">дэлгэрэнгүй →</text>
+        fill="rgba(185,212,240,0.90)"
+
+        text-anchor="end">Дэлгэрэнгүй →</text>
 </svg>`;
 
   return svgToDataUrl(svg);

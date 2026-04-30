@@ -108,6 +108,17 @@ const BUILDING_A: TourBuilding = {
             navHotspot("nav-a1-03", "a1-09", "Урагш явах", 35, -10),
             navHotspot("nav-a1-02", "a1-05", "Урд хонгил", 140, -6),
           ],
+          infoHotspots: [
+            {
+              id: "info-a1-02",
+              type: "info",
+              yaw: -100,
+              pitch: 0,
+              title: "Үүдний танхим",
+              description: "МУИС-ын 7-р байр болох Мэдээллийн технологи, электроникийн сургуулийн үүдний танхим.",
+              details: { roomCode: "Main hall", department: "МТЭС" },
+            }
+          ]
         },
         {
           id: "a1-05",
@@ -187,19 +198,8 @@ const BUILDING_A: TourBuilding = {
           description: "Сургууль руу орж гарах 2 дахь хаалга",
           hotspots: [
             navHotspot("nav-a1-07a", "a1-07", "Буцах", -90),
-            navHotspot("nav-a1-09", "a1-09", "Гарах", 0),  //garah haalga solih
-            navHotspot("nav-a1-07b", "a1-10", "2 давхарт гарах", 180),
-          ],
-          infoHotspots: [
-            {
-              id: "info-a1-103",
-              type: "info",
-              yaw: 45,
-              pitch: 0,
-              title: "Дасгалын анги 103",
-              description: "Бага бүлгийн дасгал, семинарын танхим.",
-              details: { roomCode: "A-103", capacity: 40, equipment: ["Самбар", "Проектор"] },
-            },
+            navHotspot("nav-a1-09", "a-outside", "Гарах", 0),  //garah haalga solih
+            navHotspot("nav-a1-07b", "a2-08", "2 давхарт гарах", 180),
           ],
         },
         {
@@ -214,17 +214,6 @@ const BUILDING_A: TourBuilding = {
             navHotspot("nav-a1-09b", "a1-15", "109-р анги руу орох", -110),
             
           ],
-          infoHotspots: [
-            {
-              id: "info-a1-104",
-              type: "info",
-              yaw: 45,
-              pitch: 0,
-              title: "Дасгалын анги 104",
-              description: "Компьютерийн дасгалын анги.",
-              details: { roomCode: "A-104", capacity: 35, equipment: ["Компьютер 35ш", "Проектор"] },
-            },
-          ],
         },
         {
           id: "a1-10",
@@ -236,17 +225,6 @@ const BUILDING_A: TourBuilding = {
             navHotspot("nav-a1-08b", "a1-11", "Зүүн булан", -175),
 
           ],
-          infoHotspots: [
-            {
-              id: "info-a1-cafe",
-              type: "info",
-              yaw: 0,
-              pitch: 0,
-              title: "Кафетери",
-              description: "Оюутан, багш нарт зориулсан хоолны газар. 07:30–18:00.",
-              details: { roomCode: "A-CAFE", capacity: 100 },
-            },
-          ],
         },
         {
           id: "a1-11",
@@ -257,18 +235,6 @@ const BUILDING_A: TourBuilding = {
           hotspots: [
             navHotspot("nav-a1-09b", "a1-09", "Буцах", 180),
             navHotspot("nav-a1-08b", "a1-12", "Зүүн булан", 0),
-
-          ],
-          infoHotspots: [
-            {
-              id: "info-a1-cafe",
-              type: "info",
-              yaw: 60,
-              pitch: 0,
-              title: "Кафетери",
-              description: "Оюутан, багш нарт зориулсан хоолны газар. 07:30–18:00.",
-              details: { roomCode: "A-CAFE", capacity: 100 },
-            },
           ],
         },
         {
@@ -279,41 +245,30 @@ const BUILDING_A: TourBuilding = {
           defaultYaw: 60,
           hotspots: [
             navHotspot("nav-a1-09b", "a1-11", "Буцах", -110),
-            navHotspot("nav-a1-08b", "a1-13", "Зүүн булан", 70),
+            navHotspot("nav-a1-08b", "a1-13", "114-р анги", 70),
 
-          ],
-          infoHotspots: [
-            {
-              id: "info-a1-cafe",
-              type: "info",
-              yaw: 60,
-              pitch: 0,
-              title: "Кафетери",
-              description: "Оюутан, багш нарт зориулсан хоолны газар. 07:30–18:00.",
-              details: { roomCode: "A-CAFE", capacity: 100 },
-            },
           ],
         },
         {
           id: "a1-13",
-          label: "Зүүн шат",
+          label: "114-р анги дотор",
           panoramaUrl: "/panoramas/A/inside114.jpg",
-          description: "1-р давхрын кафетери",
+          description: "1-р давхрын лекцийн танхим 114-р анги дотор",
           defaultYaw: 0,
+          defaultZoom: 10,
           hotspots: [
             navHotspot("nav-a1-09b", "a1-12", "Буцах", 93),
             navHotspot("nav-a1-08b", "a1-14", "Араас харах", 0),
-
           ],
           infoHotspots: [
             {
-              id: "info-a1-cafe",
+              id: "info-a1-114",
               type: "info",
-              yaw: 60,
+              yaw: 55,
               pitch: 0,
-              title: "Кафетери",
-              description: "Оюутан, багш нарт зориулсан хоолны газар. 07:30–18:00.",
-              details: { roomCode: "A-CAFE", capacity: 100 },
+              title: "Лекцийн танхим 114-р анги",
+              description: "1-р давхрын лекцийн танхим 114-р анги дотор",
+              details: { roomCode: "A-114", capacity: 120, equipment: ["Проектор"] },
             },
           ],
         },
@@ -325,40 +280,41 @@ const BUILDING_A: TourBuilding = {
           defaultYaw: 10,
           defaultPitch: -10,
           hotspots: [
-            navHotspot("nav-a1-09b", "a1-12", "Гарах", 10,-25),
-
+            navHotspot("nav-a1-09b", "a1-13", "Гарах", 10,-25),
           ],
           infoHotspots: [
             {
-              id: "info-a1-cafe",
+              id: "info-a1-114ar",
               type: "info",
-              yaw: 60,
+              yaw: 30,
               pitch: 0,
-              title: "Кафетери",
-              description: "Оюутан, багш нарт зориулсан хоолны газар. 07:30–18:00.",
-              details: { roomCode: "A-CAFE", capacity: 100 },
+              title: "Лекцийн танхим 114-р анги",
+              description: "1-р давхрын лекцийн танхим 114-р анги дотор",
+              details: { roomCode: "A-114", capacity: 120, equipment: ["Проектор"] },
             },
           ],
+
         },
         {
           id: "a1-15",
           label: "109-р лаборатори",
           panoramaUrl: "/panoramas/A/lab109.jpg",
-          description: "1-р давхрын кафетери",
+          description: "Мультимедиа лаборатори 109-р анги дотор ",
           defaultZoom:20,
+          defaultYaw: 20,
           hotspots: [
             navHotspot("nav-a1-09b", "a1-09", "Гарах", -130, -5),
 
           ],
           infoHotspots: [
             {
-              id: "info-a1-cafe",
+              id: "info-a1-lab109",
               type: "info",
-              yaw: 60,
+              yaw: 40,
               pitch: 0,
-              title: "Кафетери",
-              description: "Оюутан, багш нарт зориулсан хоолны газар. 07:30–18:00.",
-              details: { roomCode: "A-CAFE", capacity: 100 },
+              title: "Мультимедиа лаборатори",
+              description: "Мультимедиа лаборатори 109-р анги дотор .",
+              details: { roomCode: "LAB109", capacity: 25 , equipment: ["Компьютер 25ш", "Ухаалаг зурагт"] },
             },
           ],
         },
@@ -409,7 +365,7 @@ const BUILDING_A: TourBuilding = {
             {
               id: "info-a2-207",
               type: "info",
-              yaw: 90,
+              yaw: 40,
               pitch: 0,
               title: "Лекцийн танхим 207",
               description: "Их сургуулийн үндсэн лекцийн танхимуудын нэг.",
@@ -427,17 +383,6 @@ const BUILDING_A: TourBuilding = {
             navHotspot("nav-a2-02c", "a2-02", "Буцах", 0),
             navHotspot("nav-a2-04b", "a2-05", "Урагш явах", 180),
           ],
-          infoHotspots: [
-            {
-              id: "info-a2-202",
-              type: "info",
-              yaw: 90,
-              pitch: 0,
-              title: "Семинарын танхим 202",
-              description: "Бага бүлгийн семинар, хэлэлцүүлгийн танхим.",
-              details: { roomCode: "A-202", capacity: 40 },
-            },
-          ],
         },
         {
           id: "a2-05",
@@ -448,17 +393,7 @@ const BUILDING_A: TourBuilding = {
             navHotspot("nav-a2-04b", "a2-04", "Буцах", 0),
             navHotspot("nav-a2-05b", "a2-06", "Урагш явах", 180),
           ],
-          infoHotspots: [
-            {
-              id: "info-a2-203",
-              type: "info",
-              yaw: 90,
-              pitch: 0,
-              title: "Дасгалын анги 203",
-              description: "IT дасгалын анги. Компьютер тус бүрт.",
-              details: { roomCode: "A-203", capacity: 30, equipment: ["Компьютер 30ш"] },
-            },
-          ],
+
         },
         {
           id: "a2-06",
@@ -470,34 +405,23 @@ const BUILDING_A: TourBuilding = {
             navHotspot("nav-a2-06a", "a2-07", "203-руу орох", -90),
             navHotspot("nav-a2-06b", "a2-08", "Урагш явах", -175),
           ],
-          infoHotspots: [
-            {
-              id: "info-a2-204",
-              type: "info",
-              yaw: 90,
-              pitch: 0,
-              title: "Дасгалын анги 204",
-              description: "Ерөнхий зориулалтын дасгалын анги.",
-              details: { roomCode: "A-204", capacity: 40 },
-            },
-          ],
         },
         {
           id: "a2-07",
-          label: "203 өрөө",
+          label: "203 Сургалтын албаны өрөө",
           panoramaUrl: "/panoramas/A2/inside203.jpg",
           description: "203-р ангийн дотор тал",
           hotspots: [navHotspot("nav-a2-02d", "a2-06", "Буцах", -100)],
 
           infoHotspots: [
             {
-              id: "info-a2-library",
+              id: "info-a2-lib",
               type: "info",
               yaw: 0,
               pitch: 0,
-              title: "Номын сан",
-              description: "10,000 гаруй ном, цахим нөөц бүхий сургуулийн номын сан.",
-              details: { roomCode: "A-LIB", capacity: 80, equipment: ["Компьютер 20ш", "Принтер"] },
+              title: "Сургалтын алба",
+              description: "МТЭС-ийн сургалтын алба.",
+              details: { roomCode: "A-203"},
             },
           ],
         },
@@ -514,17 +438,6 @@ const BUILDING_A: TourBuilding = {
 
           defaultZoom: 0,
           defaultYaw: -40,
-          infoHotspots: [
-            {
-              id: "info-a2-student",
-              type: "info",
-              yaw: 0,
-              pitch: 0,
-              title: "Оюутны өрөө",
-              description: "Оюутнуудын амрах, бүлгээрээ суралцах орчин.",
-              details: { roomCode: "A-SR", capacity: 30 },
-            },
-          ],
         },
       ],
     },
@@ -560,6 +473,17 @@ const BUILDING_A: TourBuilding = {
           hotspots: [
             navHotspot("nav-a3-01", "a3-01", "Буцах", -90),
           ],
+          infoHotspots: [
+            {
+              id: "info-a3-304",
+              type: "info",
+              yaw: 70,
+              pitch: 0,
+              title: "304-р лабораторийн ",
+              description: "304 лабораторийн анги дотор",
+              details: { roomCode: "A-304", capacity: 30, equipment: ["Компьютер 30ш", "Проектор"] },
+            },
+          ],
         },
         {
           id: "a3-04",
@@ -577,7 +501,7 @@ const BUILDING_A: TourBuilding = {
           id: "a3-03",
           label: "303-р анги",
           panoramaUrl: "/panoramas/A3/a3-03.jpg",
-          description: "Семинарын танхим — 303",
+          description: "303 лабораторийн анги дотор",
           defaultYaw: 180,
           hotspots: [
             navHotspot("nav-a3-03b", "a3-04", "Буцах", 60),
@@ -587,11 +511,11 @@ const BUILDING_A: TourBuilding = {
             {
               id: "info-a3-302",
               type: "info",
-              yaw: 180,
+              yaw: -120,
               pitch: 0,
-              title: "Семинарын анги 302",
-              description: "",
-              details: { roomCode: "A-302", capacity: 35 },
+              title: "303 лабораторийн анги",
+              description: "303 лабораторийн анги дотор",
+              details: { roomCode: "A-303", capacity: 35, equipment: ["Компьютер 10ш", "Проектор"] },
             },
           ],
         },
@@ -611,7 +535,7 @@ const BUILDING_A: TourBuilding = {
               pitch: 0,
               title: "Компьютерийн лаборатори 3А",
               description: "Өндөр гүйцэтгэлтэй компьютер бүхий лаборатори.",
-              details: { roomCode: "A-LAB3A", capacity: 30, equipment: ["Workstation 30ш", "Сервер"] },
+              details: { roomCode: "A-302", capacity: 25, equipment: ["Компьютер 30ш", "Проектор"] },
             },
           ],
         },
@@ -648,11 +572,11 @@ const BUILDING_A: TourBuilding = {
             {
               id: "info-a3-conf",
               type: "info",
-              yaw: 0,
+              yaw: 30,
               pitch: 0,
-              title: "Хурлын танхим 3",
-              description: "Дунд хэмжээний хурлын танхим. Видеоконференц тоноглогдсон.",
-              details: { roomCode: "A-CONF3", capacity: 20, equipment: ["ВК систем", "Проектор"] },
+              title: "301 лабораторийн анги",
+              description: "301 лабораторийн анги дотор",
+              details: { roomCode: "A-301", capacity: 20, equipment: ["Компьютер 20ш", "Проектор"] },
             },
           ],
         },
@@ -707,13 +631,13 @@ const BUILDING_A: TourBuilding = {
           hotspots: [navHotspot("nav-a4-02b", "a4-02", "Буцах", -70)],
           infoHotspots: [
             {
-              id: "info-a4-401",
+              id: "info-a4-403",
               type: "info",
-              yaw: 90,
+              yaw: 20,
               pitch: 0,
-              title: "Лекцийн танхим 401",
-              description: "Шинэчлэгдсэн тоног бүхий лекцийн танхим.",
-              details: { roomCode: "A-401", capacity: 80, equipment: ["Смарт самбар", "Проектор"] },
+              title: "Лабораторийн анги 403",
+              description: "Шинэчлэгдсэн тоног бүхий лабораторийн анги.",
+              details: { roomCode: "A-403", capacity: 25, equipment: ["Компьютер 25ш", "Проектор"] },
             },
           ],
         },
@@ -729,19 +653,19 @@ const BUILDING_A: TourBuilding = {
         },
         {
           id: "a4-05",
-          label: "403-р анги",
+          label: "404-р анги",
           panoramaUrl: "/panoramas/A4/a4-05.jpg",
-          description: "Дасгалын анги — 403",
+          description: "Лекцийн танхим 404-р анги дотор",
           hotspots: [navHotspot("nav-a4-04b", "a4-04", "Буцах", -90)],
           infoHotspots: [
             {
-              id: "info-a4-403",
+              id: "info-a4-404",
               type: "info",
-              yaw: 90,
+              yaw: 50,
               pitch: 0,
-              title: "Дасгалын анги 403",
-              description: "",
-              details: { roomCode: "A-403", capacity: 40 },
+              title: "Лекцийн танхим 404",
+              description: "4 давхарын лекцийн танхим 404-р анги дотор.",
+              details: { roomCode: "A-404", capacity: 60, equipment: ["Проектор"] },
             },
           ],
         },
@@ -762,17 +686,6 @@ const BUILDING_A: TourBuilding = {
           hotspots: [navHotspot("nav-a4-06b", "a4-06", "Буцах", 90),
               navHotspot("nav-a4-07a", "a4-08", "Урагш явах", -90)
           ],
-          infoHotspots: [
-            {
-              id: "info-a4-research",
-              type: "info",
-              yaw: 0,
-              pitch: 0,
-              title: "Судалгааны өрөө 4А",
-              description: "Докторантур оюутан, судлаачдын ажлын орчин.",
-              details: { roomCode: "A-RES4A", department: "Судалгааны тэнхим" },
-            },
-          ],
         },
         {
           id: "a4-08",
@@ -783,33 +696,22 @@ const BUILDING_A: TourBuilding = {
               navHotspot("nav-a4-08a", "a4-09", "404-р анги", 0),
               navHotspot("nav-a4-08c", "a4-10", "Урд шат", -90)
           ],
-          infoHotspots: [
-            {
-              id: "info-a4-conf",
-              type: "info",
-              yaw: 0,
-              pitch: 0,
-              title: "Хурлын танхим 4",
-              description: "Олон улсын хурал, видеоконференцэд зориулсан танхим.",
-              details: { roomCode: "A-CONF4", capacity: 30, equipment: ["ВК систем", "Смарт самбар"] },
-            },
-          ],
         },
         {
           id: "a4-09",
-          label: "404-р анги",
+          label: "401-р анги",
           panoramaUrl: "/panoramas/A4/a4-09.jpg",
-          description: "404-р анги дотор",
+          description: "401-р анги дотор",
           hotspots: [navHotspot("nav-a4-08b", "a4-08", "Буцах", -80)],
           infoHotspots: [
             {
               id: "info-a4-dean",
               type: "info",
-              yaw: 0,
+              yaw: 30,
               pitch: 0,
-              title: "Деканатын тасаг",
-              description: "Сургуулийн захиргаа, деканат. Хуваарь, бичиг баримтын асуудал.",
-              details: { roomCode: "A-DEAN", department: "Захиргаа" },
+              title: "401-р лаборатори",
+              description: "401-р лабораторийн анги дотор.",
+              details: { roomCode: "A-401", equipment: ["Компьютер 25ш", "Проектор"] },
             },
           ],
         },
