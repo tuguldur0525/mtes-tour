@@ -21,8 +21,8 @@ type GyroscopePlugin =
   import("@photo-sphere-viewer/gyroscope-plugin").GyroscopePlugin;
 
 // ── Tiny Planet timing ─────────────────────────────────────────────────────────
-const PLANET_HOLD_MS = 2500;
-const PLANET_ANIM_MS = 5000;
+const PLANET_HOLD_MS = 1000;
+const PLANET_ANIM_MS = 3000;
 
 interface PanoViewerProps {
   scene: TourScene;
