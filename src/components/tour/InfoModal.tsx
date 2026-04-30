@@ -28,7 +28,12 @@ export function InfoModal({ hotspot, onCloseAction }: InfoModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            className="fixed inset-x-0 top-1/2 z-40 w-full max-w-sm px-4 -translate-y-1/2 mx-auto sm:top-auto sm:bottom-24 sm:-translate-y-0"
+            className="
+    fixed inset-0 z-40 flex items-center justify-center px-4
+    md:inset-auto md:right-1/4 md:top-2/4 md:-translate-y-1/3 md:px-0
+    md:w-full md:max-w-sm
+    w-full max-w-sm
+  "
           >
             <div className="glass-dark rounded-2xl p-5 shadow-2xl border border-navy-600/40">
               {/* Header */}

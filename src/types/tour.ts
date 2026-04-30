@@ -1,7 +1,6 @@
 /**
  * types/tour.ts — shared types for the 360° virtual campus tour
  */
-
 import { Url } from "next/dist/shared/lib/router/router";
 
 export interface NavHotspot {

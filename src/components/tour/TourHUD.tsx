@@ -29,7 +29,7 @@ export function TourHUD({ building, floor, scene }: TourHUDProps) {
     <div className="relative bottom-0 left-0 right-0 z-20">
       {/* Location breadcrumb */}
       <div className="flex items-center justify-between px-4 py-3 glass-dark border-t border-navy-700/50">
-        <div className="flex items-center gap-2 text-sm">
+        <div className="flex items-center gap-2 text-[11px] sm:text-sm">
           <MapPin className="w-4 h-4 text-navy-400 shrink-0" />
           <span className="text-gray-400">{building.name}</span>
           <span className="text-gray-600">/</span>
