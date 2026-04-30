@@ -152,22 +152,6 @@ const BUILDING_A: TourBuilding = {
             navHotspot("nav-a1-02b", "a1-02", "Буцах", 80),
             navHotspot("nav-a1-05", "a2-01", "2 давхарт гарах", 0),
           ],
-          infoHotspots: [
-            {
-              id: "info-a1-101",
-              type: "info",
-              yaw: 90,
-              pitch: 0,
-              title: "Лекцийн танхим 101",
-              description: "Их хэмжээний лекцийн танхим. Проектор, чаргуур тоноглогдсон.",
-              details: {
-                roomCode: "A-101",
-                capacity: 120,
-                department: "Нийтлэг хэрэглээ",
-                equipment: ["Проектор", "Чаргуур", "Микрофон"],
-              },
-            },
-          ],
         },
         {
           id: "a1-06",
