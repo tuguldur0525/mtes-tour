@@ -265,6 +265,7 @@ export function PanoViewer({
         fisheye: isTinyPlanet ? (2 as unknown as boolean) : false,
         minFov: 30,
         maxFov: 110,
+        moveSpeed: 1.5,
         navbar: ["zoom", "fullscreen"],
         loadingTxt: "Ачаалж байна...",
         touchmoveTwoFingers: false,

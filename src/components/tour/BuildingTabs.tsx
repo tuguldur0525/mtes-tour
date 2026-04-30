@@ -23,7 +23,7 @@ export function BuildingTabs({
             key={building.id}
             onClick={() => onBuildingChange(building.id)}
             className={cn(
-              "flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-md",
+              "flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium duration-200 shadow-md text-[11px] sm:text-sm",
               active
                 ? "bg-navy-600 text-white shadow-navy-600/40"
                 : "glass-dark text-gray-300 hover:text-white hover:bg-navy-700/60",
@@ -38,9 +38,7 @@ export function BuildingTabs({
             ) : (
               <Building2 className="w-3.5 h-3.5" />
             )}
-            <span className="text-[10px] sm:text-sm leading-tight text-center line-clamp-2 break-words">
-              {building.name}
-            </span>
+            {building.name}
           </button>
         );
       })}
