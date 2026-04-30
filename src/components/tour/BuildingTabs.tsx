@@ -15,7 +15,7 @@ export function BuildingTabs({
   onBuildingChange,
 }: BuildingTabsProps) {
   return (
-    <div className="absolute top-20 left-1/2 -translate-x-1/2 z-20 flex gap-2 ">
+    <div className="absolute top-10 md:top-20 left-1/2 -translate-x-1/2 z-20 flex gap-2 ">
       {buildings.map((building) => {
         const active = building.id === currentBuildingId;
         return (

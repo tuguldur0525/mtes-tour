@@ -349,7 +349,7 @@ export function PanoViewer({
       (scene as TourScene & { tinyPlanet?: boolean }).tinyPlanet === true;
 
     const options: Record<string, unknown> = {
-      transition: 800,
+      transition: 400,
       showLoader: false,
     };
 

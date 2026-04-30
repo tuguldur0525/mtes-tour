@@ -944,6 +944,39 @@ const BUILDING_C: TourBuilding = {
 // ─────────────────────────────────────────────
 //  Main export
 // ─────────────────────────────────────────────
+function initScenePreloads(buildings: TourBuilding[]) {
+  const panoramaBySceneId = new Map<string, string>();
+
+  for (const building of buildings) {
+    for (const floor of building.floors) {
+      for (const scene of floor.scenes) {
+        if (scene.panoramaUrl) {
+          panoramaBySceneId.set(scene.id, scene.panoramaUrl);
+        }
+      }
+    }
+  }
+
+  for (const building of buildings) {
+    for (const floor of building.floors) {
+      for (const scene of floor.scenes) {
+        const targets = new Set<string>();
+
+        for (const hotspot of scene.hotspots ?? []) {
+          if (hotspot.type === "nav" && hotspot.targetSceneId) {
+            const url = panoramaBySceneId.get(hotspot.targetSceneId);
+            if (url) targets.add(url);
+          }
+        }
+
+        scene.preloadUrls = [...targets];
+      }
+    }
+  }
+}
+
+initScenePreloads([BUILDING_A, BUILDING_B, BUILDING_C]);
+
 export const TOUR_CONFIG: TourConfig = {
   defaultBuildingId: "A",
   buildings: [BUILDING_A, BUILDING_B, BUILDING_C],
