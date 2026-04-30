@@ -151,7 +151,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="mn" className={inter.variable}>
+    <html lang="mn" data-scroll-behavior="smooth" className={inter.variable}>
       <head>
         {/* JSON-LD structured data */}
         <script

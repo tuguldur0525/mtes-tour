@@ -14,6 +14,7 @@
 import { useEffect, useRef, useCallback, useState } from "react";
 import type { TourScene, NavHotspot, InfoHotspot } from "@/types/tour";
 
+import { AutorotatePlugin } from "@photo-sphere-viewer/autorotate-plugin";
 type PSVViewer = import("@photo-sphere-viewer/core").Viewer;
 type MarkersPlugin =
   import("@photo-sphere-viewer/markers-plugin").MarkersPlugin;
@@ -264,7 +265,7 @@ export function PanoViewer({
         fisheye: isTinyPlanet ? (2 as unknown as boolean) : false,
         minFov: 30,
         maxFov: 110,
-        navbar: ["autorotate", "zoom", "fullscreen"],
+        navbar: ["zoom", "fullscreen"],
         loadingTxt: "Ачаалж байна...",
         touchmoveTwoFingers: false,
         mousewheelCtrlKey: false,

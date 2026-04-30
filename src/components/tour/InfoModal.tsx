@@ -19,7 +19,7 @@ export function InfoModal({ hotspot, onCloseAction }: InfoModalProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onCloseAction}
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm z-30"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30"
           />
 
           {/* Modal */}
@@ -28,7 +28,7 @@ export function InfoModal({ hotspot, onCloseAction }: InfoModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            className="absolute bottom-24 left-1/2 -translate-x-1/2 z-40 w-full max-w-sm mx-4"
+            className="fixed inset-x-0 top-1/2 z-40 w-full max-w-sm px-4 -translate-y-1/2 mx-auto sm:top-auto sm:bottom-24 sm:-translate-y-0"
           >
             <div className="glass-dark rounded-2xl p-5 shadow-2xl border border-navy-600/40">
               {/* Header */}

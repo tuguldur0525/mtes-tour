@@ -37,7 +37,7 @@ export function SceneList({
   })();
 
   return (
-    <div className="absolute right-4 top-20 bottom-24 z-20 w-52 overflow-y-auto">
+    <div className="absolute right-4 top-20 bottom-24 z-20 w-52 overflow-y-auto ">
       <div className="glass-dark rounded-xl p-2 space-y-1 shadow-xl">
         <p className="text-xs font-semibold text-gray-400 px-2 py-1 uppercase tracking-wider">
           Байрлалууд

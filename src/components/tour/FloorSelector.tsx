@@ -34,7 +34,7 @@ export function FloorSelector({
     <>
       {/* ── Floor buttons (left side, vertically centered) ── */}
       <div className="absolute left-4 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-1.5">
-        <p className="text-xs text-gray-400 text-center mb-1 font-medium">
+        <p className="text-[11px] sm:text-xs text-gray-400 text-center mb-1 font-medium">
           Давхар
         </p>
         {sorted.map((floor) => {
@@ -46,7 +46,7 @@ export function FloorSelector({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className={cn(
-                "w-11 h-11 rounded-xl text-sm font-bold transition-all duration-200 shadow-lg",
+                "w-10 h-10 sm:w-11 sm:h-11 rounded-xl text-sm font-bold transition-all duration-200 shadow-lg",
                 active
                   ? "bg-navy-600 text-white shadow-navy-600/40 ring-2 ring-navy-400"
                   : "glass-dark text-gray-300 hover:text-white hover:bg-navy-700/60",
@@ -65,7 +65,7 @@ export function FloorSelector({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className={cn(
-              "w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg mt-2",
+              "w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center transition-all duration-200 shadow-lg mt-2",
               mapOpen
                 ? "bg-navy-500 text-white ring-2 ring-navy-300"
                 : "glass-dark text-gray-300 hover:text-white hover:bg-navy-700/60",
@@ -85,8 +85,7 @@ export function FloorSelector({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 10 }}
             transition={{ duration: 0.2 }}
-            className="absolute bottom-20 left-4 z-30 glass-dark rounded-xl overflow-hidden shadow-2xl border border-navy-600/40"
-            style={{ width: 260 }}
+            className="absolute bottom-20 left-4 z-30 glass-dark rounded-xl overflow-hidden shadow-2xl border border-navy-600/40 w-[220px] sm:w-[260px]"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-3 py-2 border-b border-navy-700/50">

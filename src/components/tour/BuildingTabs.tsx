@@ -15,7 +15,7 @@ export function BuildingTabs({
   onBuildingChange,
 }: BuildingTabsProps) {
   return (
-    <div className="absolute top-20 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+    <div className="absolute top-20 left-1/2 -translate-x-1/2 z-20 flex gap-2 ">
       {buildings.map((building) => {
         const active = building.id === currentBuildingId;
         return (
@@ -33,12 +33,14 @@ export function BuildingTabs({
               <img
                 src={building.thumbnailUrl}
                 alt={building.name}
-                className="w-4 h-4 rounded-full"
+                className="hidden sm:block w-4 h-4 rounded-full"
               />
             ) : (
               <Building2 className="w-3.5 h-3.5" />
             )}
-            {building.name}
+            <span className="text-[10px] sm:text-sm leading-tight text-center line-clamp-2 break-words">
+              {building.name}
+            </span>
           </button>
         );
       })}

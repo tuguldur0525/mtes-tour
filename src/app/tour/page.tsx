@@ -85,7 +85,6 @@ function TourContent() {
   // the PSV crossfade is enough visual feedback.
   const [isLoading, setIsLoading] = useState(true);
   const [activeModal, setActiveModal] = useState<InfoHotspot | null>(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const building = getBuilding(buildingId);
   const floor = building ? getFloor(buildingId, floorId) : undefined;
@@ -210,26 +209,6 @@ function TourContent() {
             onSceneChange={handleSceneChange}
           />
         </div>
-
-        <button
-          onClick={() => setSidebarOpen((v) => !v)}
-          className="lg:hidden absolute right-4 top-20 z-20 px-3 py-2 rounded-lg glass-dark text-xs text-gray-300 hover:text-white transition-colors"
-        >
-          {sidebarOpen ? "Хаах ✕" : "Байрлалууд ☰"}
-        </button>
-
-        {sidebarOpen && (
-          <div className="lg:hidden absolute right-4 top-32 z-20">
-            <SceneList
-              scenes={floor.scenes}
-              currentSceneId={sceneId}
-              onSceneChange={(id) => {
-                handleSceneChange(id);
-                setSidebarOpen(false);
-              }}
-            />
-          </div>
-        )}
 
         <AnimatePresence>
           {activeModal && (
