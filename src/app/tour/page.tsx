@@ -1,12 +1,4 @@
 "use client";
-/**
- * /tour — 360° VR Tour
- *
- * Fix: scene-to-scene navigation no longer triggers the loading overlay.
- *      The PSV crossfade transition handles the visual smoothly.
- *      Loading overlay only appears for building/floor changes (heavier loads).
- */
-
 import { useState, useCallback, useEffect, Suspense } from "react";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -19,6 +11,7 @@ import {
 } from "@/lib/tour.config";
 import { buildTourUrl } from "@/lib/utils";
 import type { InfoHotspot } from "@/types/tour";
+import { LayoutList } from "lucide-react";
 
 const PanoViewer = dynamic(
   () =>
@@ -48,9 +41,8 @@ import { SceneList } from "@/components/tour/SceneList";
 import { TourHUD } from "@/components/tour/TourHUD";
 
 const DEFAULT_BUILDING = TOUR_CONFIG.defaultBuildingId;
-const DEFAULT_FLOOR = 0; // always start outside
+const DEFAULT_FLOOR = 0;
 
-// Find which floor a sceneId lives on (needed for cross-floor nav hotspots)
 function findFloorForScene(buildingId: string, sceneId: string): number | null {
   const b = getBuilding(buildingId);
   if (!b) return null;
@@ -64,33 +56,28 @@ function TourContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [buildingId, setBuildingId] = useState<string>(
+  const [buildingId, setBuildingId] = useState(
     searchParams.get("building") ?? DEFAULT_BUILDING,
   );
-  const [floorId, setFloorId] = useState<number>(
+  const [floorId, setFloorId] = useState(
     Number(searchParams.get("floor") ?? DEFAULT_FLOOR),
   );
-  const [sceneId, setSceneId] = useState<string>(() => {
+  const [sceneId, setSceneId] = useState(() => {
     const fromUrl = searchParams.get("scene");
     if (fromUrl) return fromUrl;
-    const building = getBuilding(
-      searchParams.get("building") ?? DEFAULT_BUILDING,
-    );
-    const flId = Number(searchParams.get("floor") ?? DEFAULT_FLOOR);
-    return building?.floors.find((f) => f.id === flId)?.defaultSceneId ?? "";
+    const b = getBuilding(searchParams.get("building") ?? DEFAULT_BUILDING);
+    const fId = Number(searchParams.get("floor") ?? DEFAULT_FLOOR);
+    return b?.floors.find((f) => f.id === fId)?.defaultSceneId ?? "";
   });
 
-  // isLoading = true only for the initial mount + building/floor switches.
-  // Scene-to-scene nav inside the same floor does NOT set this true —
-  // the PSV crossfade is enough visual feedback.
   const [isLoading, setIsLoading] = useState(true);
   const [activeModal, setActiveModal] = useState<InfoHotspot | null>(null);
+  const [sceneSheetOpen, setSceneSheetOpen] = useState(false);
 
   const building = getBuilding(buildingId);
   const floor = building ? getFloor(buildingId, floorId) : undefined;
   const scene = floor ? getScene(buildingId, floorId, sceneId) : undefined;
 
-  // Fallback for invalid URL params
   useEffect(() => {
     if (!building) {
       setBuildingId(DEFAULT_BUILDING);
@@ -103,12 +90,9 @@ function TourContent() {
       setSceneId(outside.defaultSceneId);
       return;
     }
-    if (!scene && floor.scenes.length > 0) {
-      setSceneId(floor.defaultSceneId);
-    }
+    if (!scene && floor.scenes.length > 0) setSceneId(floor.defaultSceneId);
   }, [building, floor, scene]);
 
-  // Sync URL
   useEffect(() => {
     if (!scene) return;
     router.replace(buildTourUrl(buildingId, floorId, sceneId), {
@@ -116,42 +100,34 @@ function TourContent() {
     });
   }, [buildingId, floorId, sceneId, scene, router]);
 
-  // ── Building change — show overlay (different building = cold load) ──────
-  const handleBuildingChange = useCallback((newBuildingId: string) => {
-    const b = getBuilding(newBuildingId);
+  const handleBuildingChange = useCallback((newId: string) => {
+    const b = getBuilding(newId);
     if (!b) return;
-    const outsideFloor = b.floors.find((fl) => fl.id === 0) ?? b.floors[0];
-    setBuildingId(newBuildingId);
-    setFloorId(outsideFloor.id);
-    setSceneId(outsideFloor.defaultSceneId);
-    setIsLoading(true); // ← overlay for building switch
+    const outside = b.floors.find((f) => f.id === 0) ?? b.floors[0];
+    setBuildingId(newId);
+    setFloorId(outside.id);
+    setSceneId(outside.defaultSceneId);
+    setIsLoading(true);
   }, []);
 
-  // ── Floor change — show overlay (floor map change = noticeable jump) ─────
   const handleFloorChange = useCallback(
     (newFloorId: number) => {
       const f = getFloor(buildingId, newFloorId);
       if (!f) return;
       setFloorId(newFloorId);
       setSceneId(f.defaultSceneId);
-      setIsLoading(true); // ← overlay for floor switch
+      setIsLoading(true);
     },
     [buildingId],
   );
 
-  // ── Scene nav — NO overlay, let PSV crossfade do the work ───────────────
   const handleSceneChange = useCallback(
     (newSceneId: string) => {
       const targetFloorId = findFloorForScene(buildingId, newSceneId);
-      const crossesFloor = targetFloorId !== null && targetFloorId !== floorId;
-
-      if (crossesFloor) {
-        // Crossing a floor boundary is a bigger jump — show overlay briefly
-        setFloorId(targetFloorId!);
+      if (targetFloorId !== null && targetFloorId !== floorId) {
+        setFloorId(targetFloorId);
         setIsLoading(true);
       }
-      // ← no setIsLoading(true) for same-floor scene changes
-
       setSceneId(newSceneId);
       setActiveModal(null);
     },
@@ -182,12 +158,13 @@ function TourContent() {
       <div className="flex-1 relative overflow-hidden">
         <PanoViewer
           scene={scene}
+          buildingId={buildingId}
+          floorId={floorId}
           onNavigate={handleNavigate}
           onInfoOpen={handleInfoOpen}
           onReady={handleViewerReady}
         />
 
-        {/* Overlay only shows for slow loads (building/floor switch) */}
         <AnimatePresence>{isLoading && <LoadingOverlay />}</AnimatePresence>
 
         <BuildingTabs
@@ -202,13 +179,13 @@ function TourContent() {
           onFloorChange={handleFloorChange}
         />
 
-        <div className="hidden lg:block">
-          <SceneList
-            scenes={floor.scenes}
-            currentSceneId={sceneId}
-            onSceneChange={handleSceneChange}
-          />
-        </div>
+        <SceneList
+          scenes={floor.scenes}
+          currentSceneId={sceneId}
+          onSceneChange={handleSceneChange}
+          isOpen={sceneSheetOpen}
+          onClose={() => setSceneSheetOpen(false)}
+        />
 
         <AnimatePresence>
           {activeModal && (
@@ -217,7 +194,19 @@ function TourContent() {
         </AnimatePresence>
       </div>
 
-      <TourHUD building={building} floor={floor} scene={scene} />
+      <div className="relative">
+        <button
+          onClick={() => setSceneSheetOpen(true)}
+          className="lg:hidden absolute -top-9 right-3 z-20
+                    flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                    glass-dark text-xs text-gray-300 hover:text-white
+                    border border-navy-600/40 shadow-lg"
+        >
+          <LayoutList className="w-3.5 h-3.5" />
+          <span>Байрлалууд</span>
+        </button>
+        <TourHUD building={building} floor={floor} scene={scene} />
+      </div>
     </div>
   );
 }
