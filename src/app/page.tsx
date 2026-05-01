@@ -162,7 +162,7 @@ export default function HomePage() {
                     <div className="flex items-center gap-4 text-xs text-gray-500">
                       <span className="flex items-center gap-1">
                         <Layers className="w-3.5 h-3.5" />
-                        {building.floors.length} давхар
+                        {building.floors.length - 1} давхар
                       </span>
                       <span className="flex items-center gap-1">
                         <MapPin className="w-3.5 h-3.5" />

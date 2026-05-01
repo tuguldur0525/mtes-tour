@@ -774,8 +774,8 @@ const BUILDING_B: TourBuilding = {
           defaultZoom:0,
           hotspots: [
             navHotspot("nav-b1-01", "b-outside", "Гарах", 90),
-            navHotspot("nav-b1-02", "b1-02", "Зүүн жишүүр", 0),
-            navHotspot("nav-b1-03", "b1-03", "Баруун жишүүр", 180),
+            navHotspot("nav-b1-02", "b1-02", "Зүүн жигүүр", 0),
+            navHotspot("nav-b1-03", "b1-03", "Баруун жигүүр", 180),
             
           ],
           infoHotspots: [
@@ -794,9 +794,9 @@ const BUILDING_B: TourBuilding = {
         },
         {
           id: "b1-02",
-          label: "Зүүн жишүүр",
+          label: "Зүүн жигүүр",
           panoramaUrl: "/panoramas/B/entrance-left.jpg",
-          description: "Бизнесийн сургуулийн үүдний танхимын зүүн жишүүр",
+          description: "Бизнесийн сургуулийн үүдний танхимын зүүн жигүүр",
           hotspots: [
             navHotspot("nav-b1-01", "b1-01", "Буцах", 90),
             navHotspot("nav-b1-03", "b1-04", "2-р давхарт гарах", 180),
@@ -804,9 +804,9 @@ const BUILDING_B: TourBuilding = {
         },
         {
           id: "b1-03",
-          label: "Баруун жишүүр",
+          label: "Баруун жигүүр",
           panoramaUrl: "/panoramas/B/entrance-right.jpg",
-          description: "Бизнесийн сургуулийн үүдний танхимын баруун жишүүр",
+          description: "Бизнесийн сургуулийн үүдний танхимын баруун жигүүр",
           defaultYaw: -45,
           defaultZoom:40,
           hotspots: [
