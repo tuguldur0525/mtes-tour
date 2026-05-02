@@ -126,9 +126,9 @@ function makeBoardSvg(hs: InfoHotspot): string {
         font-size="11" font-weight="400" fill="rgba(160,190,220,0.65)">${detail}</text>`
       : ""
   }
-  <text x="${W - 14}" y="50" font-family="system-ui,-apple-system,sans-serif"
+  <text x="${W - 14}" y="68" font-family="system-ui,-apple-system,sans-serif"
         font-size="10" font-weight="300" fill="rgba(182,212,240,0.90)"
-        text-anchor="end">дэлгэрэнгүй →</text>
+        text-anchor="end">Дэлгэрэнгүй →</text>
 </svg>`);
 }
 
