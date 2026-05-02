@@ -1,31 +1,39 @@
 {
-"headers": [
+  "headers": [
     {
-    "source": "/panoramas/(.*)",
-    "headers": [
+      "source": "/panoramas/(.*)",
+      "headers": [
         {
-        "key": "Cache-Control",
-        "value": "public, max-age=31536000, immutable"
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "Vercel-CDN-Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         }
-    ]
+      ]
     },
     {
-    "source": "/images/(.*)",
-    "headers": [
+      "source": "/images/(.*)",
+      "headers": [
         {
-        "key": "Cache-Control",
-        "value": "public, max-age=2592000, stale-while-revalidate=86400"
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000, immutable"
+        },
+        {
+          "key": "Vercel-CDN-Cache-Control",
+          "value": "public, max-age=2592000"
         }
-    ]
+      ]
     },
     {
-    "source": "/_next/static/(.*)",
-    "headers": [
+      "source": "/_next/static/(.*)",
+      "headers": [
         {
-        "key": "Cache-Control",
-        "value": "public, max-age=31536000, immutable"
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         }
-    ]
+      ]
     }
-]
+  ]
 }
