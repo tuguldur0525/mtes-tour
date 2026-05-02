@@ -1,29 +1,22 @@
 "use client";
 /**
- * PanoViewer.tsx — performance-optimised PSV v5 wrapper
+ * PanoViewer.tsx — Photo Sphere Viewer (PSV v5) wrapper
  *
- * Key performance improvements:
- *  1. ImageCache: fetch → blob → HTMLImageElement.decode() pipeline
- *     Images are fully GPU-decoded BEFORE setPanorama is called.
- *     Result: texture upload is instant, no stall.
+ * KEY FIX: Smart preloading — only fetch DIRECT neighbours (scenes linked
+ * by hotspots from the current scene), NOT the entire building graph.
+ * Previous version was recursively resolving all reachable scenes which
+ * saturated the browser connection pool and slowed the active scene download.
  *
- *  2. Aggressive neighbour preload: every scene preloads ALL scenes
- *     reachable via its nav hotspots as soon as it finishes loading.
- *     By the time user clicks, image is already decoded in GPU memory.
- *
- *  3. Parallel preload: all neighbours fetched simultaneously with
- *     Promise.allSettled — one slow image doesn't block others.
- *
- *  4. transition: 400ms (was 800ms) — feels faster because image is
- *     already ready, so the shorter crossfade doesn't feel abrupt.
- *
- *  5. Gyroscope support via GyroscopePlugin.
+ * Preload strategy:
+ *  - Active scene: fetched + decoded immediately (blocks until ready)
+ *  - Direct neighbours: fetched in background AFTER active scene is visible,
+ *    limited to MAX_PRELOAD concurrent requests
+ *  - Everything else: not fetched until the user navigates there
  */
 
 import { useEffect, useRef, useCallback, useState } from "react";
 import type { TourScene, NavHotspot, InfoHotspot } from "@/types/tour";
-import { getScene, getBuilding } from "@/lib/tour.config";
-import { AutorotatePlugin } from "@photo-sphere-viewer/autorotate-plugin";
+import { getBuilding } from "@/lib/tour.config";
 
 type PSVViewer = import("@photo-sphere-viewer/core").Viewer;
 type MarkersPlugin =
@@ -34,46 +27,40 @@ type GyroscopePlugin =
 const PLANET_HOLD_MS = 1000;
 const PLANET_ANIM_MS = 3000;
 
+// Maximum concurrent background preload fetches.
+// 2 keeps the connection pool free for the active scene fetch.
+const MAX_PRELOAD = 2;
+
 interface PanoViewerProps {
   scene: TourScene;
-  buildingId: string; // needed to resolve neighbour URLs for preloading
+  buildingId: string;
   floorId: number;
   onNavigate: (sceneId: string) => void;
   onInfoOpen: (hotspot: InfoHotspot) => void;
   onReady: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onViewerInit?: (viewer: any) => void;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  IMAGE CACHE
-//  url → decoded blob URL (HTMLImageElement.decode() ensures GPU upload)
+//  IMAGE CACHE — fetch → blob → decode pipeline
 // ─────────────────────────────────────────────────────────────────────────────
-const imageCache = new Map<string, string>(); // url → blobUrl
-const inFlight = new Map<string, Promise<string>>(); // url → pending promise
+const imageCache = new Map<string, string>();
+const inFlight = new Map<string, Promise<string>>();
 
 async function loadImage(url: string): Promise<string> {
-  // 1. Return cached blob URL immediately
-  const cached = imageCache.get(url);
-  if (cached) return cached;
-
-  // 2. Deduplicate concurrent requests for the same URL
-  const existing = inFlight.get(url);
-  if (existing) return existing;
+  if (imageCache.has(url)) return imageCache.get(url)!;
+  if (inFlight.has(url)) return inFlight.get(url)!;
 
   const promise = (async () => {
     const resp = await fetch(url);
     if (!resp.ok) throw new Error(`HTTP ${resp.status} — ${url}`);
-
     const blob = await resp.blob();
     const blobUrl = URL.createObjectURL(blob);
-
-    // decode() ensures the browser decompresses the JPEG and uploads the
-    // texture to GPU memory NOW — not lazily when PSV first renders it.
     const img = new Image();
     img.src = blobUrl;
-    await img.decode().catch(() => {
-      /* decode not supported in all browsers */
-    });
-
+    // decode() pushes texture to GPU before PSV needs it → no stall on swap
+    await img.decode().catch(() => {});
     imageCache.set(url, blobUrl);
     inFlight.delete(url);
     return blobUrl;
@@ -83,13 +70,20 @@ async function loadImage(url: string): Promise<string> {
   return promise;
 }
 
-// Preload a list of URLs in parallel — silently ignores failures
-function preloadAll(urls: string[]): void {
-  const toFetch = urls.filter(
-    (u) => u && !imageCache.has(u) && !inFlight.has(u),
-  );
-  if (toFetch.length === 0) return;
-  Promise.allSettled(toFetch.map(loadImage)).catch(() => {});
+// Preload a list of URLs sequentially with a concurrency cap.
+// Sequential (not Promise.allSettled) so we don't flood connections.
+async function preloadQueue(urls: string[], max = MAX_PRELOAD): Promise<void> {
+  // Skip already cached / in-flight URLs
+  const todo = urls.filter((u) => u && !imageCache.has(u) && !inFlight.has(u));
+  if (!todo.length) return;
+
+  // Process in chunks of `max` at a time
+  for (let i = 0; i < todo.length; i += max) {
+    const chunk = todo.slice(i, i + max);
+    await Promise.allSettled(chunk.map(loadImage));
+    // Small yield between chunks so the main thread stays responsive
+    await new Promise((r) => setTimeout(r, 50));
+  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -132,9 +126,9 @@ function makeBoardSvg(hs: InfoHotspot): string {
         font-size="11" font-weight="400" fill="rgba(160,190,220,0.65)">${detail}</text>`
       : ""
   }
-  <text x="${W - 14}" y="68" font-family="system-ui,-apple-system,sans-serif"
+  <text x="${W - 14}" y="50" font-family="system-ui,-apple-system,sans-serif"
         font-size="10" font-weight="300" fill="rgba(182,212,240,0.90)"
-        text-anchor="end">Дэлгэрэнгүй →</text>
+        text-anchor="end">дэлгэрэнгүй →</text>
 </svg>`);
 }
 
@@ -153,9 +147,9 @@ function playTinyPlanetIntro(
   viewer.setOption("fisheye" as never, 2 as never);
   viewer.rotate({ yaw: 0, pitch: -Math.PI / 2 });
   viewer.zoom(0);
-  const startTime = performance.now();
+  const t0 = performance.now();
   function step(now: number) {
-    const t = Math.min((now - startTime) / duration, 1);
+    const t = Math.min((now - t0) / duration, 1);
     const e = easeInOutSine(t);
     viewer.setOption("fisheye" as never, (2 * (1 - e)) as never);
     viewer.zoom(targetZoom * e);
@@ -181,10 +175,10 @@ function deviceHasGyroscope() {
 export function PanoViewer({
   scene,
   buildingId,
-  floorId,
   onNavigate,
   onInfoOpen,
   onReady,
+  onViewerInit,
 }: PanoViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<PSVViewer | null>(null);
@@ -193,6 +187,9 @@ export function PanoViewer({
   const readyFiredRef = useRef(false);
   const isFirstLoad = useRef(true);
   const pendingSceneRef = useRef("");
+  // Track the abort controller for background preloads so we can cancel
+  // them when the user navigates before they finish
+  const preloadAbortRef = useRef<AbortController | null>(null);
 
   const [gyroAvailable, setGyroAvailable] = useState(false);
   const [gyroActive, setGyroActive] = useState(false);
@@ -200,6 +197,7 @@ export function PanoViewer({
   const onReadyRef = useRef(onReady);
   const onNavigateRef = useRef(onNavigate);
   const onInfoOpenRef = useRef(onInfoOpen);
+  const onViewerInitRef = useRef(onViewerInit);
   useEffect(() => {
     onReadyRef.current = onReady;
   }, [onReady]);
@@ -209,15 +207,21 @@ export function PanoViewer({
   useEffect(() => {
     onInfoOpenRef.current = onInfoOpen;
   }, [onInfoOpen]);
+  useEffect(() => {
+    onViewerInitRef.current = onViewerInit;
+  }, [onViewerInit]);
 
-  // ── Resolve all neighbour panorama URLs for a scene ──────────────────────
-  const getNeighbourUrls = useCallback(
+  // ── DIRECT neighbours only — not the whole building graph ─────────────────
+  // Only resolve the scenes that nav hotspots on THIS scene point to.
+  // This is 2–3 URLs max, not 40+.
+  const getDirectNeighbourUrls = useCallback(
     (s: TourScene): string[] => {
       const urls: string[] = [];
+      const building = getBuilding(buildingId);
+      if (!building) return urls;
+
       (s.hotspots ?? []).forEach((hs: NavHotspot) => {
-        // Find the target scene across all floors of this building
-        const building = getBuilding(buildingId);
-        if (!building) return;
+        // Search all floors for the target scene
         for (const floor of building.floors) {
           const target = floor.scenes.find((sc) => sc.id === hs.targetSceneId);
           if (target) {
@@ -226,9 +230,13 @@ export function PanoViewer({
           }
         }
       });
-      // Also include explicitly listed preload URLs
+
+      // Also include explicitly listed preload URLs (optional, from tour.config)
       const ext = s as TourScene & { preloadUrls?: string[] };
-      (ext.preloadUrls ?? []).forEach((u) => urls.push(u));
+      (ext.preloadUrls ?? []).forEach((u) => {
+        if (!urls.includes(u)) urls.push(u);
+      });
+
       return urls;
     },
     [buildingId],
@@ -237,8 +245,9 @@ export function PanoViewer({
   const buildMarkers = useCallback((s: TourScene) => {
     const markers: object[] = [];
     (s.hotspots ?? []).forEach((hs: NavHotspot) => {
-      const pitchAbs = Math.abs(hs.pitch ?? -5);
-      const px = Math.round(56 * Math.max(0.65, 1 - pitchAbs / 90));
+      const px = Math.round(
+        56 * Math.max(0.65, 1 - Math.abs(hs.pitch ?? -5) / 90),
+      );
       markers.push({
         id: hs.id,
         position: { yaw: `${hs.yaw}deg`, pitch: `${hs.pitch ?? -5}deg` },
@@ -272,7 +281,7 @@ export function PanoViewer({
       try {
         const perm = await DevOrient.requestPermission();
         if (perm !== "granted") {
-          alert("Гироскоп ашиглахыг зөвшөөрөөгүй байна.");
+          alert("Гироскоп зөвшөөрөл өгөөгүй байна.");
           return;
         }
       } catch {
@@ -288,7 +297,29 @@ export function PanoViewer({
     }
   }, [gyroActive]);
 
-  // ── Init viewer ONCE ──────────────────────────────────────────────────────
+  // ── Start background preload, cancelling any previous one ─────────────────
+  const startNeighbourPreload = useCallback(
+    (s: TourScene) => {
+      // Cancel previous preload batch if still running
+      preloadAbortRef.current?.abort();
+      const ac = new AbortController();
+      preloadAbortRef.current = ac;
+
+      const urls = getDirectNeighbourUrls(s);
+      if (!urls.length) return;
+
+      // Delay 800ms so the active scene transition finishes first,
+      // then fetch neighbours one at a time (MAX_PRELOAD = 2 concurrent)
+      setTimeout(() => {
+        if (!ac.signal.aborted) {
+          preloadQueue(urls, MAX_PRELOAD).catch(() => {});
+        }
+      }, 800);
+    },
+    [getDirectNeighbourUrls],
+  );
+
+  // ── Init viewer once ───────────────────────────────────────────────────────
   useEffect(() => {
     if (!containerRef.current) return;
     let destroyed = false;
@@ -302,7 +333,7 @@ export function PanoViewer({
 
       if (destroyed || !containerRef.current) return;
 
-      // Pre-fetch first panorama before viewer init — no loading spinner
+      // Fetch first panorama before creating viewer — no PSV loading spinner
       let firstUrl = scene.panoramaUrl;
       try {
         firstUrl = await loadImage(scene.panoramaUrl);
@@ -340,6 +371,8 @@ export function PanoViewer({
       gyroRef.current = viewer.getPlugin<GyroscopePlugin>(GyroscopePlugin);
       if (deviceHasGyroscope()) setGyroAvailable(true);
 
+      onViewerInitRef.current?.(viewer);
+
       viewer.addEventListener("ready", () => {
         if (!readyFiredRef.current) {
           readyFiredRef.current = true;
@@ -360,8 +393,8 @@ export function PanoViewer({
             isFirstLoad.current = false;
           }
 
-          // Preload all neighbours immediately after first scene is visible
-          preloadAll(getNeighbourUrls(scene));
+          // Only preload DIRECT neighbours after first scene is visible
+          startNeighbourPreload(scene);
         }
       });
 
@@ -382,6 +415,7 @@ export function PanoViewer({
 
     return () => {
       destroyed = true;
+      preloadAbortRef.current?.abort();
       gyroRef.current = null;
       viewerRef.current?.destroy();
       viewerRef.current = null;
@@ -391,7 +425,7 @@ export function PanoViewer({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ── Scene change ──────────────────────────────────────────────────────────
+  // ── Scene change ───────────────────────────────────────────────────────────
   useEffect(() => {
     const viewer = viewerRef.current;
     const markers = markersRef.current;
@@ -401,10 +435,15 @@ export function PanoViewer({
     pendingSceneRef.current = thisSceneId;
     readyFiredRef.current = false;
 
+    // Cancel any running background preloads immediately —
+    // the active scene download must have full bandwidth
+    preloadAbortRef.current?.abort();
+    preloadAbortRef.current = null;
+
     const isTinyPlanet = !!(scene as TourScene & { tinyPlanet?: boolean })
       .tinyPlanet;
 
-    // Swap markers immediately — instant visual feedback
+    // Swap markers immediately for instant visual feedback
     if (markers) {
       markers.clearMarkers();
       buildMarkers(scene).forEach((m) =>
@@ -412,14 +451,14 @@ export function PanoViewer({
       );
     }
 
-    // Fetch + decode image FIRST, then swap — eliminates texture upload stall
+    // Priority 1: fetch active scene — gets full bandwidth, no competition
     loadImage(scene.panoramaUrl)
       .then((blobUrl) => {
-        if (pendingSceneRef.current !== thisSceneId) return; // stale — user navigated again
-        if (!viewerRef.current) return;
+        if (pendingSceneRef.current !== thisSceneId || !viewerRef.current)
+          return;
 
         const options: Record<string, unknown> = {
-          transition: 400, // shorter crossfade — image is already decoded, feels snappier
+          transition: 400, // short crossfade — image already decoded
           showLoader: false,
         };
 
@@ -461,8 +500,8 @@ export function PanoViewer({
             viewerRef.current?.setOption("fisheye" as never, false as never);
           }
 
-          // Immediately preload all scenes reachable from here
-          preloadAll(getNeighbourUrls(scene));
+          // Priority 2: only AFTER active scene is visible, start background preload
+          startNeighbourPreload(scene);
         });
       })
       .catch(() => {
@@ -471,7 +510,7 @@ export function PanoViewer({
           onReadyRef.current();
         }
       });
-  }, [scene, buildMarkers, getNeighbourUrls]);
+  }, [scene, buildMarkers, startNeighbourPreload]);
 
   return (
     <div
@@ -480,22 +519,17 @@ export function PanoViewer({
     >
       <div ref={containerRef} className="absolute inset-0 w-full h-full" />
 
-      {/* Gyroscope button — mobile only */}
       {gyroAvailable && (
         <button
           onClick={handleGyroToggle}
           title={gyroActive ? "Гироскоп унтраах" : "Гироскоп асаах"}
-          className={`
-            absolute bottom-14 right-3 z-30
-            w-10 h-10 rounded-xl
-            flex items-center justify-center
-            transition-all duration-200 shadow-lg sm:bottom-16
-            ${
-              gyroActive
-                ? "bg-navy-500 text-white ring-2 ring-navy-300"
-                : "glass-dark text-gray-300 hover:text-white"
-            }
-          `}
+          className={`absolute bottom-14 right-3 z-30 w-10 h-10 rounded-xl
+                      flex items-center justify-center transition-all duration-200 shadow-lg sm:bottom-16
+                      ${
+                        gyroActive
+                          ? "bg-navy-500 text-white ring-2 ring-navy-300"
+                          : "glass-dark text-gray-300 hover:text-white"
+                      }`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
