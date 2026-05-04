@@ -44,7 +44,7 @@ export function Navbar() {
             </div>
             <div className="sm:block">
               <p className="text-white font-bold text-sm leading-tight">
-                Монгол улсын их сургууль
+                Монгол Улсын Их Сургууль
               </p>
               <p className="text-navy-200 text-xs leading-tight">
                 МТЭС-Виртуал Аялал
