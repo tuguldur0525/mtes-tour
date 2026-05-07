@@ -535,7 +535,7 @@ const BUILDING_A: TourBuilding = {
           label: "302-р анги",
           panoramaUrl: "/panoramas/A3/a3-05.jpg",
           preloadUrls: ["/panoramas/A3/a3-06.jpg"],
-          description: "Компьютерийн лаборатори 302",
+            description: "Компьютерын лаборатори 302",
           defaultYaw: 0,
           defaultZoom: 20,
           hotspots: [navHotspot("nav-a3-04b", "a3-06", "Буцах", -90)],
@@ -545,7 +545,7 @@ const BUILDING_A: TourBuilding = {
               type: "info",
               yaw: 45,
               pitch: 0,
-              title: "Компьютерийн лаборатори 3А",
+              title: "Компьютерын лаборатори 3А",
               description: "Өндөр гүйцэтгэлтэй компьютер бүхий лаборатори.",
               details: { roomCode: "A-302", capacity: 25, equipment: ["Компьютер 30ш", "Проектор"] },
             },
@@ -906,9 +906,63 @@ const BUILDING_B: TourBuilding = {
           hotspots: [
             navHotspot("nav-b1-04b", "b1-04", "Зүүн жигүүр", 0),
             navHotspot("nav-b1-01c", "b1-03", "Буцах", 80, -20),
-          ],}
+            navHotspot("nav-b1-05-up", "b1-06", "3-р давхарт гарах", 30, -10),
+          ],
+          infoHotspots: [
+            {
+              id: "info-b2-right",
+              type: "info",
+              yaw: -20,
+              pitch: 0,
+              title: "2-р давхрын коридор",
+              description: "Бизнесийн сургууль дотоодын 2-р давхрын баруун хэсэг.",
+              details: { roomCode: "B-2F-RIGHT" },
+            },
+          ],
+        },
       ],
-    }, 
+    },
+
+    // ── Floor 3 ──
+    {
+      id: 3,
+      label: "3-р давхар",
+      defaultSceneId: "b1-06",
+      scenes: [
+        {
+          id: "b1-06",
+          label: "3-р давхрын нэг өрөө",
+          panoramaUrl: "/panoramas/B/2ndfloor-left.jpg",
+          preloadUrls: ["/panoramas/B/2ndfloor-right.jpg"],
+          description: "Бизнесийн сургуулийн 3-р давхрын нэг өрөө.",
+          defaultYaw: 0,
+          defaultZoom: 30,
+          hotspots: [
+            navHotspot("nav-b1-06-down", "b1-05", "2-р давхарт буцах", 180, 0),
+            navHotspot("nav-b1-06-up", "b1-07", "4-р давхарт гарах", 0, -10),
+          ],
+        },
+      ],
+    },
+
+    // ── Floor 4 ──
+    {
+      id: 4,
+      label: "4-р давхар",
+      defaultSceneId: "b1-07",
+      scenes: [
+        {
+          id: "b1-07",
+          label: "4-р давхрын нэг өрөө",
+          panoramaUrl: "/panoramas/B/2ndfloor-right.jpg",
+          preloadUrls: ["/panoramas/B/2ndfloor-left.jpg"],
+          description: "Бизнесийн сургуулийн 4-р давхрын нэг өрөө.",
+          defaultYaw: 0,
+          defaultZoom: 30,
+          hotspots: [navHotspot("nav-b1-07-down", "b1-06", "3-р давхарт буцах", 0, 0)],
+        },
+      ],
+    },
   ],
 };
 

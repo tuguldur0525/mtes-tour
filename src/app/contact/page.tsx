@@ -31,7 +31,7 @@ export default function ContactPage() {
                 icon: MapPin,
                 label: "Хаяг",
                 value:
-                  "Улаанбаатар хот, Сүхбаатар дүүрэг, Оюутны гудамж 14/3, МУИС-ийн 7, 8-р байр",
+                  "Улаанбаатар хот, Сүхбаатар дүүрэг, Оюутны гудамж 14/3, МУИС хичээлийн 7-р байр",
               },
               { icon: Phone, label: "Утас", value: "+976 7575-4400" },
               { icon: Mail, label: "Цахим шуудан", value: "info@mtes.edu.mn" },
@@ -58,15 +58,20 @@ export default function ContactPage() {
           </div>
 
           {/* Map */}
-          <div className="glass rounded-xl overflow-hidden min-h-[320px] opacity-90">
+          <div className="glass rounded-xl overflow-hidden min-h-[320px] opacity-99 relative">
+            {/* Dark overlay */}
+            <div
+              className="absolute inset-0 pointer-events-none z-10"
+              style={{ background: "rgba(13,27,42,0.3)" }}
+            />
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2673.123456789!2d106.9274!3d47.9202!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDfCsDU1JzEyLjciTiAxMDbCsDU1JzM4LjYiRQ!5e1!3m2!1smn!2smn!4v1234567890"
+              src="https://www.google.com/maps?q=%D0%9C%D0%A3%D0%98%D0%A1+%D1%85%D0%B8%D1%87%D1%8D%D1%8D%D0%BB%D0%B8%D0%B9%D0%BD+7-%D1%80+%D0%B1%D0%B0%D0%B9%D1%80&z=14&output=embed"
               width="100%"
               height="100%"
               className="w-full h-full border-0"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="МТЭС байршил"
+              title="МУИС хичээлийн 7-р байр"
             />
           </div>
         </div>

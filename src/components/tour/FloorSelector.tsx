@@ -34,7 +34,7 @@ export function FloorSelector({
     <>
       {/* ── Floor buttons (left side, vertically centered) ── */}
       <div className="absolute left-4 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-1.5">
-        <p className="text-[11px] sm:text-xs text-gray-400 text-center mb-1 font-medium">
+        <p className="text-[11px] sm:text-xs text-[#1F4E79] text-center mb-1 font-medium">
           Давхар
         </p>
         {sorted.map((floor) => {

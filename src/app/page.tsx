@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import {
   ArrowRight,
   Building2,
@@ -9,8 +12,11 @@ import {
   Compass,
 } from "lucide-react";
 import { TOUR_CONFIG } from "@/lib/tour.config";
+import type { TourBuilding } from "@/types/tour";
 
 export default function HomePage() {
+  const [comingSoon, setComingSoon] = useState<TourBuilding | null>(null);
+
   const totalScenes = TOUR_CONFIG.buildings.reduce(
     (sum, b) => sum + b.floors.reduce((fs, f) => fs + f.scenes.length, 0),
     0,
@@ -88,7 +94,7 @@ export default function HomePage() {
                 value: String(buildingCount),
                 label: "Барилга",
               },
-              { icon: Layers, value: String(floorCount), label: "Давхар" },
+              { icon: Layers, value: String(floorCount - 3), label: "Давхар" },
               { icon: MapPin, value: `${totalScenes}+`, label: "Байрлал" },
               { icon: Compass, value: "360°", label: "Панорама" },
             ].map(({ icon: Icon, value, label }) => (
@@ -122,18 +128,15 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto auto-rows-fr">
             {TOUR_CONFIG.buildings.map((building) => {
               const sceneCount = building.floors.reduce(
                 (s, f) => s + f.scenes.length,
                 0,
               );
-              return (
-                <Link
-                  key={building.id}
-                  href={`/tour?building=${building.id}&floor=0`}
-                  className="group relative overflow-hidden rounded-2xl glass border border-navy-600/30 hover:border-navy-500/60 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-navy-900/50"
-                >
+
+              const cardInner = (
+                <div className="flex flex-col h-full">
                   <div className="h-64 relative overflow-hidden rounded-t-2xl">
                     {building.thumbnailUrl ? (
                       <img
@@ -147,16 +150,21 @@ export default function HomePage() {
                       </div>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-br from-navy-800/30 to-navy-900/30" />
+                    {building.comingSoon ? (
+                      <div className="absolute top-3 right-3 px-2 py-1 rounded-md bg-amber-500/80 text-xs text-white font-semibold">
+                        Тун удахгүй
+                      </div>
+                    ) : null}
                   </div>
 
-                  <div className="p-6">
+                  <div className="p-6 flex-1 flex flex-col">
                     <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-navy-200 transition-colors">
                       {building.name}
                     </h3>
                     <p className="text-gray-400 text-sm mb-4 leading-relaxed">
                       {building.description}
                     </p>
-                    <div className="flex items-center gap-4 text-xs text-gray-500">
+                    <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
                       <span className="flex items-center gap-1">
                         <Layers className="w-3.5 h-3.5" />
                         {building.floors.length - 1} давхар
@@ -166,11 +174,37 @@ export default function HomePage() {
                         {sceneCount} байрлал
                       </span>
                     </div>
-                    <div className="mt-4 flex items-center text-navy-400 text-sm font-medium group-hover:text-navy-300 transition-colors">
-                      Аялал эхлүүлэх
-                      <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                    <div className="mt-auto">
+                      {building.comingSoon ? (
+                        <div className="flex items-center text-amber-400/80 text-sm font-medium">
+                          Хөгжүүлэлт явагдаж байна
+                        </div>
+                      ) : (
+                        <div className="flex items-center text-navy-400 text-sm font-medium group-hover:text-navy-300 transition-colors">
+                          Аялал эхлүүлэх
+                          <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      )}
                     </div>
                   </div>
+                </div>
+              );
+
+              return building.comingSoon ? (
+                <button
+                  key={building.id}
+                  onClick={() => setComingSoon(building)}
+                  className="group relative overflow-hidden rounded-2xl glass border border-navy-600/30 hover:border-amber-500/40 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-navy-900/50 text-left w-full h-full"
+                >
+                  {cardInner}
+                </button>
+              ) : (
+                <Link
+                  key={building.id}
+                  href={`/tour?building=${building.id}&floor=0`}
+                  className="group relative overflow-hidden rounded-2xl glass border border-navy-600/30 hover:border-navy-500/60 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-navy-900/50 h-full"
+                >
+                  {cardInner}
                 </Link>
               );
             })}
@@ -229,6 +263,63 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      {/* ── Coming Soon Modal ─────────────────── */}
+      {comingSoon && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{
+            background: "rgba(7,16,36,0.85)",
+            backdropFilter: "blur(6px)",
+          }}
+          onClick={() => setComingSoon(null)}
+        >
+          <div
+            className="relative flex flex-col items-center gap-5 px-10 py-10 rounded-2xl text-center shadow-2xl"
+            style={{
+              background: "rgba(31,78,121,0.6)",
+              border: "1px solid rgba(99,155,255,0.2)",
+              maxWidth: 380,
+              margin: "0 16px",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              className="w-16 h-16 rounded-full flex items-center justify-center text-3xl"
+              style={{
+                background: "rgba(99,155,255,0.12)",
+                border: "1px solid rgba(99,155,255,0.25)",
+              }}
+            >
+              🏗️
+            </div>
+            <div>
+              <p
+                className="text-xs font-semibold tracking-widest uppercase mb-2"
+                style={{ color: "rgba(99,155,255,0.8)" }}
+              >
+                Тун удахгүй
+              </p>
+              <h2 className="text-xl font-bold text-white mb-2">
+                {comingSoon.name}
+              </h2>
+              <p className="text-sm" style={{ color: "rgba(180,195,220,0.8)" }}>
+                Энэ барилгын 360° виртуал аялал хөгжүүлэлтийн шатанд байгаа ба
+                удахгүй нээгдэх болно.
+              </p>
+            </div>
+            <button
+              onClick={() => setComingSoon(null)}
+              className="mt-1 px-6 py-2 rounded-lg text-sm font-medium text-white transition-colors"
+              style={{
+                background: "rgba(99,155,255,0.2)",
+                border: "1px solid rgba(99,155,255,0.35)",
+              }}
+            >
+              Буцах
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

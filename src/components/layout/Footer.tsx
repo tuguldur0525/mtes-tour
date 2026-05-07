@@ -26,7 +26,7 @@ export function Footer() {
 
           {/* Links */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Холбоосууд</h3>
+            <h3 className="text-white font-semibold mb-4">Холбооснууд</h3>
             <ul className="space-y-2 text-sm">
               {[
                 { href: "/tour", label: "360° Виртуал Аялал" },
@@ -49,7 +49,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
                 >
-                  МТЭС-ийн Албан Сайт ↗
+                  МТЭС-ийн Албан Ёсны Сайт ↗
                 </a>
               </li>
             </ul>

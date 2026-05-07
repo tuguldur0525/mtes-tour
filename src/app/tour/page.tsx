@@ -289,17 +289,179 @@ function TourContent() {
   );
 }
 
+function TourLoadingFallback() {
+  return (
+    <div
+      className="fixed inset-0 top-16 flex flex-col items-center justify-center"
+      style={{ background: "#0d1b2a" }}
+    >
+      {/* Ambient glow */}
+      <div
+        style={{
+          position: "absolute",
+          width: 420,
+          height: 420,
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(46,117,182,0.13) 0%, transparent 70%)",
+          animation: "pulse-glow 3s ease-in-out infinite",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Spinning ring */}
+      <div
+        style={{
+          position: "relative",
+          width: 72,
+          height: 72,
+          marginBottom: 28,
+        }}
+      >
+        {/* Outer ring */}
+        <svg
+          width="72"
+          height="72"
+          viewBox="0 0 72 72"
+          style={{
+            position: "absolute",
+            inset: 0,
+            animation: "spin-slow 2.4s linear infinite",
+          }}
+        >
+          <circle
+            cx="36"
+            cy="36"
+            r="32"
+            fill="none"
+            stroke="rgba(46,117,182,0.18)"
+            strokeWidth="2"
+          />
+          <circle
+            cx="36"
+            cy="36"
+            r="32"
+            fill="none"
+            stroke="#2E75B6"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeDasharray="52 150"
+            strokeDashoffset="0"
+          />
+        </svg>
+        {/* Inner ring — counter-rotate */}
+        <svg
+          width="72"
+          height="72"
+          viewBox="0 0 72 72"
+          style={{
+            position: "absolute",
+            inset: 0,
+            animation: "spin-slow 1.6s linear infinite reverse",
+          }}
+        >
+          <circle
+            cx="36"
+            cy="36"
+            r="22"
+            fill="none"
+            stroke="rgba(46,117,182,0.12)"
+            strokeWidth="1.5"
+          />
+          <circle
+            cx="36"
+            cy="36"
+            r="22"
+            fill="none"
+            stroke="rgba(46,117,182,0.55)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeDasharray="20 90"
+          />
+        </svg>
+        {/* Center dot */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              width: 10,
+              height: 10,
+              borderRadius: "50%",
+              background: "#2E75B6",
+              boxShadow: "0 0 12px rgba(46,117,182,0.8)",
+              animation: "pulse-dot 2s ease-in-out infinite",
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Text */}
+      <p
+        style={{
+          color: "rgba(222,234,241,0.9)",
+          fontSize: 13,
+          letterSpacing: "0.18em",
+          textTransform: "uppercase",
+          fontWeight: 500,
+          animation: "fade-pulse 2s ease-in-out infinite",
+        }}
+      >
+        Ачаалж байна
+      </p>
+
+      {/* Dots */}
+      <div style={{ display: "flex", gap: 6, marginTop: 14 }}>
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            style={{
+              width: 5,
+              height: 5,
+              borderRadius: "50%",
+              background: "rgba(46,117,182,0.7)",
+              animation: `bounce-dot 1.2s ease-in-out infinite`,
+              animationDelay: `${i * 0.2}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      <style>{`
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+        @keyframes pulse-glow {
+          0%, 100% { opacity: 0.6; transform: scale(1); }
+          50%       { opacity: 1;   transform: scale(1.08); }
+        }
+        @keyframes pulse-dot {
+          0%, 100% { opacity: 0.7; transform: scale(1); }
+          50%       { opacity: 1;   transform: scale(1.3); }
+        }
+        @keyframes fade-pulse {
+          0%, 100% { opacity: 0.55; }
+          50%       { opacity: 1; }
+        }
+        @keyframes bounce-dot {
+          0%, 80%, 100% { transform: translateY(0);    opacity: 0.4; }
+          40%            { transform: translateY(-6px); opacity: 1;   }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 export default function TourPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="fixed inset-0 top-16 bg-navy-900 flex items-center justify-center">
-          <div className="text-white text-sm animate-pulse">
-            Ачаалж байна...
-          </div>
-        </div>
-      }
-    >
+    <Suspense fallback={<TourLoadingFallback />}>
       <TourContent />
     </Suspense>
   );
