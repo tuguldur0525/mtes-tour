@@ -73,6 +73,9 @@ function TourContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [activeModal, setActiveModal] = useState<InfoHotspot | null>(null);
   const [sceneSheetOpen, setSceneSheetOpen] = useState(false);
+  const [comingSoonBuilding, setComingSoonBuilding] = useState<string | null>(
+    null,
+  );
 
   const building = getBuilding(buildingId);
   const floor = building ? getFloor(buildingId, floorId) : undefined;
@@ -103,6 +106,10 @@ function TourContent() {
   const handleBuildingChange = useCallback((newId: string) => {
     const b = getBuilding(newId);
     if (!b) return;
+    if (b.comingSoon) {
+      setComingSoonBuilding(b.name);
+      return;
+    }
     const outside = b.floors.find((f) => f.id === 0) ?? b.floors[0];
     setBuildingId(newId);
     setFloorId(outside.id);
@@ -166,6 +173,77 @@ function TourContent() {
         />
 
         <AnimatePresence>{isLoading && <LoadingOverlay />}</AnimatePresence>
+
+        {/* Coming Soon Overlay */}
+        <AnimatePresence>
+          {comingSoonBuilding && (
+            <div
+              className="absolute inset-0 z-50 flex items-center justify-center"
+              style={{
+                background: "rgba(7,16,36,0.85)",
+                backdropFilter: "blur(6px)",
+              }}
+              onClick={() => setComingSoonBuilding(null)}
+            >
+              <div
+                className="relative flex flex-col items-center gap-5 px-10 py-10 rounded-2xl text-center shadow-2xl"
+                style={{
+                  background: "rgba(15,28,56,0.95)",
+                  border: "1px solid rgba(99,155,255,0.2)",
+                  maxWidth: 380,
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Icon */}
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center text-3xl"
+                  style={{
+                    background: "rgba(99,155,255,0.12)",
+                    border: "1px solid rgba(99,155,255,0.25)",
+                  }}
+                >
+                  🏗️
+                </div>
+
+                <div>
+                  <p
+                    className="text-xs font-semibold tracking-widest uppercase mb-2"
+                    style={{ color: "rgba(99,155,255,0.8)" }}
+                  >
+                    Тун удахгүй
+                  </p>
+                  <h2 className="text-xl font-bold text-white mb-2">
+                    {comingSoonBuilding}
+                  </h2>
+                  <p
+                    className="text-sm"
+                    style={{ color: "rgba(180,195,220,0.8)" }}
+                  >
+                    Энэ барилгын 360° виртуал аялал хөгжүүлэлтийн шатанд байгаа
+                    ба удахгүй нээгдэх болно.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setComingSoonBuilding(null)}
+                  className="mt-1 px-6 py-2 rounded-lg text-sm font-medium text-white transition-colors"
+                  style={{
+                    background: "rgba(99,155,255,0.2)",
+                    border: "1px solid rgba(99,155,255,0.35)",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.background = "rgba(99,155,255,0.35)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.background = "rgba(99,155,255,0.2)")
+                  }
+                >
+                  Буцах
+                </button>
+              </div>
+            </div>
+          )}
+        </AnimatePresence>
 
         <BuildingTabs
           buildings={TOUR_CONFIG.buildings}

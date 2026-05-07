@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     "МТЭС — Мэдээллийн Технологи, Электроникийн Сургууль. " +
     "МУИС-ийн харьяа сургуулийн тэнхимүүд, сургалтын хөтөлбөр, " +
-    "профессор багш нарын танилцуулга. 3000+ оюутан, 10 хөтөлбөр.",
+    "профессор багш нарын танилцуулга. 3000+ оюутан, 12 хөтөлбөр.",
   alternates: { canonical: "/about" },
   openGraph: {
     title: "МТЭС — Сургуулийн Тухай",
@@ -30,10 +30,11 @@ const DEPARTMENTS = [
     code: "МКУТ",
     programs: [
       "Компьютерын ухаан",
-      "Мултимедиа технологи",
+      "Мультимедиа технологи",
       "Программ хангамж",
       "Мэдээллийн систем",
       "Мэдээллийн технологи",
+      "Хиймэл оюун",
     ],
   },
   {
@@ -44,11 +45,12 @@ const DEPARTMENTS = [
       "Компьютерын сүлжээ",
       "Холбооны технологи",
       "Электроникийн инженерчлэл",
+      "Компьютерийн инженерчлэл",
     ],
   },
   {
     icon: Layers,
-    name: "Хэрэглээний математикийн тэнхим",
+    name: "Статистик, хэрэглээний математикийн тэнхим",
     code: "ХМТ",
     programs: ["Статистик", "Хэрэглээний математик"],
   },
@@ -73,10 +75,18 @@ export default function AboutPage() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-16">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
-            { icon: Users, value: "3,000+", label: "Оюутан" },
-            { icon: BookOpen, value: "10", label: "Хөтөлбөр" },
-            { icon: Award, value: "80+", label: "Профессор" },
-            { icon: GraduationCap, value: "2013", label: "Байгуулагдсан он" },
+            { icon: Users, value: "3,000+", label: "Идэвхитэй оюутан" },
+            {
+              icon: BookOpen,
+              value: "12",
+              label: "Бакалаврын сургалтын хөтөлбөр",
+            },
+            { icon: Award, value: "80+", label: "Профессор   багш нар" },
+            {
+              icon: GraduationCap,
+              value: "2013",
+              label: "Шинэчлэн байгуулагдсан он",
+            },
           ].map(({ icon: Icon, value, label }) => (
             <div key={label} className="glass rounded-xl p-5 text-center">
               <Icon className="w-6 h-6 text-navy-400 mx-auto mb-2" />

@@ -919,6 +919,7 @@ const BUILDING_B: TourBuilding = {
 const BUILDING_C: TourBuilding = {
   id: "C",
   name: "МУИС Номын сан",
+  comingSoon: true,
   description:
     "Захиргааны барилга. Ректорат, санхүү, хүний нөөцийн газрууд байрладаг.",
   thumbnailUrl: "/images/buildings/thumb-building-c.jpg",

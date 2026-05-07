@@ -59,8 +59,8 @@ export default function HomePage() {
           </h1>
 
           <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed animate-slide-up">
-            Хүссэн газраасаа МТЭС-ийн барилга, лаб, танхимуудыг харж, дотоод
-            орчинтой танилцаарай
+            Хүссэн газраасаа МТЭС-ийн барилга, лаборатори, танхимуудыг харж,
+            дотоод орчинтой танилцаарай
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up [animation-delay:200ms]">
@@ -147,9 +147,6 @@ export default function HomePage() {
                       </div>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-br from-navy-800/30 to-navy-900/30" />
-                    <div className="absolute top-3 right-3 px-2 py-1 rounded-md bg-navy-600/60 text-xs text-white font-mono">
-                      {sceneCount} scene
-                    </div>
                   </div>
 
                   <div className="p-6">

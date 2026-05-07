@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   // ── Description — shown in Google search results ─────────────────────────
   description:
     "Мэдээллийн Технологи, Электроникийн Сургуулийн (МТЭС — МУИС) 360° виртуал аялал. " +
-    "Барилга, лаб, лекцийн танхимуудтай хүссэн газраасаа танилцаарай. " +
+    "Барилга, лаборатори, лекцийн танхимуудтай хүссэн газраасаа танилцаарай. " +
     "MTES NUM virtual campus tour — explore buildings, labs and lecture halls online.",
 
   // ── Keywords ─────────────────────────────────────────────────────────────
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     title: "МТЭС 360° Виртуал Аялал — МУИС",
     description:
-      "МТЭС-ийн кампусаар виртуалаар аялаарай. Барилга, лаб, танхимуудыг 360° панорамаар харах.",
+      "МТЭС-ийн кампусаар виртуалаар аялаарай. Барилга, лаборатори, танхимуудыг 360° панорамаар харах.",
     images: [
       {
         url: "/images/og-image.jpg", // create a 1200×630px image and put it here

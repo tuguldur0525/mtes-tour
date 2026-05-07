@@ -82,6 +82,7 @@ export interface TourBuilding {
   description: string;
   thumbnailUrl?: string;
   floors: TourFloor[];
+  comingSoon?: boolean;
 }
 
 export interface TourConfig {
