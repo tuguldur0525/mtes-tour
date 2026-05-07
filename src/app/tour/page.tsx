@@ -188,7 +188,7 @@ function TourContent() {
               <div
                 className="relative flex flex-col items-center gap-5 px-10 py-10 rounded-2xl text-center shadow-2xl"
                 style={{
-                  background: "rgba(15,28,56,0.95)",
+                  background: "rgba(31,78,121,0.5)",
                   border: "1px solid rgba(99,155,255,0.2)",
                   maxWidth: 380,
                 }}
