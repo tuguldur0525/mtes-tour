@@ -104,8 +104,8 @@ export const metadata: Metadata = {
 
   // ── Icons ─────────────────────────────────────────────────────────────────
   icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png", // 180×180px
+    icon: "/images/num-logo.png",
+    apple: "/images/num-logo.png",
   },
 
   // ── Verification — paste your codes from Google Search Console / Bing ────

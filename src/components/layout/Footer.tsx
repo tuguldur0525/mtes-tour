@@ -49,7 +49,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
                 >
-                  МТЭС-ийн Албан Ёсны Сайт ↗
+                  МТЭС-ийн албан ёсны сайт ↗
                 </a>
               </li>
             </ul>
