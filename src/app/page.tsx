@@ -248,7 +248,7 @@ export default function HomePage() {
               {
                 icon: "🥽",
                 title: "VR Горим",
-                desc: "Бүх төрлийн VR төхөөрөмж ашиглах боломжтой.",
+                desc: "Google Cardboard-той VR headset-ээ ашиглах боломжтой.",
               },
             ].map(({ icon, title, desc }) => (
               <div
@@ -303,8 +303,7 @@ export default function HomePage() {
                 {comingSoon.name}
               </h2>
               <p className="text-sm" style={{ color: "rgba(180,195,220,0.8)" }}>
-                Энэ барилгын 360° виртуал аялал хөгжүүлэлтийн шатанд байгаа ба
-                удахгүй нээгдэх болно.
+                Энэ барилгын 360° виртуал аялал хөгжүүлэлтийн шатанд байгаа.
               </p>
             </div>
             <button
